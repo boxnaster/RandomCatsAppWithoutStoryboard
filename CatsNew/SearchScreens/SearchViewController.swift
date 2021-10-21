@@ -12,7 +12,6 @@ class SearchViewController: UIViewController {
 
     let dataStorage = DataStorage()
     let catModels: [CatModel]
-    var buttons = [UIButton]()
     var collectionView: UICollectionView!
 
     init() {
@@ -25,43 +24,15 @@ class SearchViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-
         super.viewDidLoad()
 
-        initializeCollectionView()
-        initializeButtons()
-    }
-
-    override func loadView() {
-
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        collectionView = UICollectionView(frame: .infinite, collectionViewLayout: layout)
-
-        view = collectionView
-    }
-
-    @objc private func flipCatButton(sender: UIButton) {
-        guard let catModel = catModels.first(where: { $0.catId == sender.tag }) else { return }
-        let singleImageViewController = SingleImageViewController(catModel: catModel)
-        navigationController?.pushViewController(singleImageViewController, animated: true)
-    }
-
-    private func initializeButtons() {
-        for catModel in catModels {
-            let button = UIButton()
-            button.setImage(catModel.image, for: .normal)
-            button.tag = catModel.catId
-            button.addTarget(self, action: #selector(flipCatButton), for: .touchUpInside)
-            buttons.append(button)
-        }
-    }
-
-    private func initializeCollectionView() {
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = UIColor.white
+        view.addSubview(collectionView)
     }
 }
 
@@ -72,8 +43,8 @@ extension SearchViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        let data = self.buttons[indexPath.item]
-        cell.backgroundView = data
+        let data = catModels[indexPath.item]
+        cell.backgroundView = UIImageView(image: data.image)
         return cell
     }
 }
@@ -82,6 +53,14 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.size.width, height: 300)
+        let ratio = (catModels[indexPath.item].image?.size.width)! / collectionView.frame.size.width
+        return CGSize(width: collectionView.frame.size.width, height: ((catModels[indexPath.item].image?.size.height)! / ratio))
+    }
+}
+
+extension SearchViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let singleImageViewController = SingleImageViewController(catModel: catModels[indexPath.item])
+        navigationController?.pushViewController(singleImageViewController, animated: true)
     }
 }
