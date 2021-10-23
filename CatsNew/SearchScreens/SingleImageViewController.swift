@@ -112,8 +112,13 @@ class SingleImageViewController: UIViewController {
         imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
         imageView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
         imageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+
+        guard let catImage = imageView.image else {
+            return
+        }
+
         imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor,
-                                         multiplier: (imageView.image!.size.width) / (imageView.image!.size.height),
+                                         multiplier: (catImage.size.width) / (catImage.size.height),
                                          constant: 0.0).isActive = true
     }
 
