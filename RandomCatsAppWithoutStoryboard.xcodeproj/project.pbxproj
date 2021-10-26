@@ -20,6 +20,7 @@
 		C7042292271A2F3200ACF67A /* DataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7042291271A2F3100ACF67A /* DataStorage.swift */; };
 		C7957EBC2723112F00E69C75 /* BreedFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7957EBB2723112F00E69C75 /* BreedFilterView.swift */; };
 		C7957EC2272414B000E69C75 /* CategoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7957EC1272414B000E69C75 /* CategoryFilterView.swift */; };
+		C7957ECC27272C1E00E69C75 /* LikeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7957ECB27272C1E00E69C75 /* LikeButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		C7042291271A2F3100ACF67A /* DataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorage.swift; sourceTree = "<group>"; };
 		C7957EBB2723112F00E69C75 /* BreedFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedFilterView.swift; sourceTree = "<group>"; };
 		C7957EC1272414B000E69C75 /* CategoryFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilterView.swift; sourceTree = "<group>"; };
+		C7957ECB27272C1E00E69C75 /* LikeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 				C704226F27175AEA00ACF67A /* SearchViewController.swift */,
 				C7957EBB2723112F00E69C75 /* BreedFilterView.swift */,
 				C7957EC1272414B000E69C75 /* CategoryFilterView.swift */,
+				C7957ECB27272C1E00E69C75 /* LikeButton.swift */,
 			);
 			path = SearchScreens;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 				C7957EBC2723112F00E69C75 /* BreedFilterView.swift in Sources */,
 				C704227027175AEA00ACF67A /* SearchViewController.swift in Sources */,
 				C704226A2716153A00ACF67A /* SingleImageViewController.swift in Sources */,
+				C7957ECC27272C1E00E69C75 /* LikeButton.swift in Sources */,
 				C7042292271A2F3200ACF67A /* DataStorage.swift in Sources */,
 				C704227627175C9E00ACF67A /* UploadViewController.swift in Sources */,
 				C7042285271A11BE00ACF67A /* CatModel.swift in Sources */,

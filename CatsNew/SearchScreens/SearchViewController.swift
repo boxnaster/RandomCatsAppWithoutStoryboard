@@ -68,25 +68,26 @@ class SearchViewController: UIViewController {
     }
 
     private func initializeBreedFilterButton() {
-        breedFilterButton.bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
-        breedFilterButton.setTitle("breed: \(breeds.joined(separator: ", "))", for: .normal)
+        breedFilterButton.setTitle("Breed: \(breeds.joined(separator: ", "))", for: .normal)
+        breedFilterButton.setTitleColor(.black, for: .normal)
         breedFilterButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         breedFilterButton.contentHorizontalAlignment = .left
         breedFilterButton.titleLabel?.numberOfLines = 1
         breedFilterButton.titleLabel?.lineBreakMode = .byTruncatingTail
-        breedFilterButton.backgroundColor = .orange
+        breedFilterButton.backgroundColor = UIColor(red: 245 / 255, green: 245 / 255, blue: 220 / 255, alpha: 1)
         breedFilterButton.layer.borderWidth = 0.5
         breedFilterButton.layer.borderColor = UIColor.gray.cgColor
         breedFilterButton.addTarget(self, action: #selector(flipBreedFilterButton), for: .touchUpInside)
     }
 
     private func initializeCategoryFilterButton() {
-        categoryFilterButton.setTitle("category: \(categories.joined(separator: ", "))", for: .normal)
+        categoryFilterButton.setTitle("Category: \(categories.joined(separator: ", "))", for: .normal)
+        categoryFilterButton.setTitleColor(.black, for: .normal)
         categoryFilterButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         categoryFilterButton.contentHorizontalAlignment = .left
         categoryFilterButton.titleLabel?.numberOfLines = 1
         categoryFilterButton.titleLabel?.lineBreakMode = .byTruncatingTail
-        categoryFilterButton.backgroundColor = .orange
+        categoryFilterButton.backgroundColor = UIColor(red: 245 / 255, green: 245 / 255, blue: 220 / 255, alpha: 1)
         categoryFilterButton.layer.borderWidth = 0.5
         categoryFilterButton.layer.borderColor = UIColor.gray.cgColor
         categoryFilterButton.addTarget(self, action: #selector(flipCategoryFilterButton), for: .touchUpInside)

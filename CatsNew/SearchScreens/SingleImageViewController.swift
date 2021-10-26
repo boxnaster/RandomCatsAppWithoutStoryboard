@@ -15,7 +15,7 @@ class SingleImageViewController: UIViewController {
     var scrollView: UIScrollView! = UIScrollView()
     var contentView: UIView! = UIView()
     var imageView: UIImageView! = UIImageView()
-    var likeButton: UIButton! = UIButton()
+    var likeButton = LikeButton()
     var breedsLabel: UILabel! = UILabel()
     var categoryLabel: UILabel! = UILabel()
 
@@ -37,7 +37,6 @@ class SingleImageViewController: UIViewController {
 
         imageView.image = catModel.image
 
-        initializeLikeButton()
         initializeBreedsLabel()
         initializeCategoryLabel()
 
@@ -49,21 +48,6 @@ class SingleImageViewController: UIViewController {
         setupLikeButton()
         setupBreedsLabel()
         setupCategoryLabel()
-    }
-
-    @objc func flipLikeButton() {
-        if catModel.isLiked == false {
-            likeButton.setImage(UIImage(named: "heart-fill.svg"), for: .normal)
-            catModel.isLiked = true
-        } else {
-            likeButton.setImage(UIImage(named: "heart.svg"), for: .normal)
-            catModel.isLiked = false
-        }
-    }
-
-    private func initializeLikeButton() {
-        likeButton.setImage(UIImage(named: "heart.svg"), for: .normal)
-        likeButton.addTarget(self, action: #selector(flipLikeButton), for: .touchUpInside)
     }
 
     private func initializeBreedsLabel() {
