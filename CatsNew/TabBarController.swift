@@ -15,19 +15,20 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
 
         let searchViewController = SearchViewController()
-        let navigationController = UINavigationController(rootViewController: searchViewController)
-        let navigationControllerTabBatItem = UITabBarItem(title: "Search",
-                                                          image: UIImage(named: "search.svg"),
-                                                          selectedImage: UIImage(named: "search.svg"))
+        let searchNavigationController = UINavigationController(rootViewController: searchViewController)
+        let searchNavigationControllerTabBatItem = UITabBarItem(title: "Search",
+                                                                image: UIImage(named: "search.svg"),
+                                                                selectedImage: UIImage(named: "search.svg"))
 
-        navigationController.tabBarItem = navigationControllerTabBatItem
+        searchNavigationController.tabBarItem = searchNavigationControllerTabBatItem
 
         let uploadViewController = UploadViewController()
-        let uploadViewControllerTabBarItem = UITabBarItem(title: "Upload",
-                                                          image: UIImage(named: "plus-circle.svg"),
-                                                          selectedImage: UIImage(named: "plus-circle.svg"))
+        let uploadNavigationController = UINavigationController(rootViewController: uploadViewController)
+        let uploadNavigationControllerTabBarItem = UITabBarItem(title: "Upload",
+                                                                image: UIImage(named: "plus-circle.svg"),
+                                                                selectedImage: UIImage(named: "plus-circle.svg"))
 
-        uploadViewController.tabBarItem = uploadViewControllerTabBarItem
+        uploadNavigationController.tabBarItem = uploadNavigationControllerTabBarItem
 
         let favouritesViewController = FavouritesViewController()
         let favouritesViewControllerTabBarItem = UITabBarItem(title: "Favourites",
@@ -36,6 +37,6 @@ class TabBarController: UITabBarController {
 
         favouritesViewController.tabBarItem = favouritesViewControllerTabBarItem
 
-        self.viewControllers = [navigationController, uploadViewController, favouritesViewController]
+        self.viewControllers = [searchNavigationController, uploadNavigationController, favouritesViewController]
     }
 }

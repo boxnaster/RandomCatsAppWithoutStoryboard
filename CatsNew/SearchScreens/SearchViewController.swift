@@ -32,6 +32,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationItem.title = "Random Cats"
         view.backgroundColor = .white
 
         initializeBreedFilterButton()
