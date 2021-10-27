@@ -31,12 +31,13 @@ class TabBarController: UITabBarController {
         uploadNavigationController.tabBarItem = uploadNavigationControllerTabBarItem
 
         let favouritesViewController = FavouritesViewController()
-        let favouritesViewControllerTabBarItem = UITabBarItem(title: "Favourites",
-                                                              image: UIImage(named: "small-heart.svg"),
-                                                              selectedImage: UIImage(named: "small-heart.svg"))
+        let favouritesNavigationController = UINavigationController(rootViewController: favouritesViewController)
+        let favouritesNavigationControllerTabBarItem = UITabBarItem(title: "Favourites",
+                                                                    image: UIImage(named: "small-heart.svg"),
+                                                                    selectedImage: UIImage(named: "small-heart.svg"))
 
-        favouritesViewController.tabBarItem = favouritesViewControllerTabBarItem
+        favouritesNavigationController.tabBarItem = favouritesNavigationControllerTabBarItem
 
-        self.viewControllers = [searchNavigationController, uploadNavigationController, favouritesViewController]
+        self.viewControllers = [searchNavigationController, uploadNavigationController, favouritesNavigationController]
     }
 }

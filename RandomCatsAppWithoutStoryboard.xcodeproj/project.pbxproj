@@ -72,7 +72,6 @@
 		C704224E27160A2B00ACF67A /* CatsNew */ = {
 			isa = PBXGroup;
 			children = (
-				C7957ED22729BBED00E69C75 /* UploadScreens */,
 				C7957ED02729AAB400E69C75 /* Storage */,
 				C704228F271A281400ACF67A /* SearchScreens */,
 				C704228E271A27A500ACF67A /* Models */,
@@ -83,6 +82,7 @@
 				C704225D27160A3200ACF67A /* Info.plist */,
 				C70422692716153A00ACF67A /* SingleImageViewController.swift */,
 				C704226C27175A7F00ACF67A /* TabBarController.swift */,
+				C704227527175C9E00ACF67A /* UploadViewController.swift */,
 				C704227227175B0700ACF67A /* FavouritesViewController.swift */,
 			);
 			path = CatsNew;
@@ -113,14 +113,6 @@
 				C7042291271A2F3100ACF67A /* DataStorage.swift */,
 			);
 			name = Storage;
-			sourceTree = "<group>";
-		};
-		C7957ED22729BBED00E69C75 /* UploadScreens */ = {
-			isa = PBXGroup;
-			children = (
-				C704227527175C9E00ACF67A /* UploadViewController.swift */,
-			);
-			name = UploadScreens;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
