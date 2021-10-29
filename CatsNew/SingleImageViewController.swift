@@ -10,14 +10,13 @@ import UIKit
 
 class SingleImageViewController: UIViewController {
 
-    public var catModel: CatModel
-
-    var scrollView: UIScrollView! = UIScrollView()
-    var contentView: UIView! = UIView()
-    var imageView: UIImageView! = UIImageView()
-    var likeButton = LikeButton()
-    var breedsLabel: UILabel! = UILabel()
-    var categoryLabel: UILabel! = UILabel()
+    private var catModel: CatModel
+    private var scrollView: UIScrollView! = UIScrollView()
+    private var contentView: UIView! = UIView()
+    private var imageView: UIImageView! = UIImageView()
+    private var likeButton = LikeButton()
+    private var breedsLabel: UILabel! = UILabel()
+    private var categoryLabel: UILabel! = UILabel()
 
     init(catModel: CatModel) {
         self.catModel = catModel
@@ -35,8 +34,7 @@ class SingleImageViewController: UIViewController {
         self.title = catModel.name
         self.view.backgroundColor = .white
 
-        imageView.image = catModel.image
-
+        initializeImageView()
         initializeBreedsLabel()
         initializeCategoryLabel()
 
@@ -48,6 +46,19 @@ class SingleImageViewController: UIViewController {
         setupLikeButton()
         setupBreedsLabel()
         setupCategoryLabel()
+    }
+
+    @objc func imageTapped() {
+        let zoomableImage = ZoomableImage(image: imageView.image)
+        zoomableImage.modalPresentationStyle = .overFullScreen
+        present(zoomableImage, animated: true, completion: nil)
+    }
+
+    private func initializeImageView() {
+        imageView.image = catModel.image
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
+        imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(tapGestureRecognizer)
     }
 
     private func initializeBreedsLabel() {
