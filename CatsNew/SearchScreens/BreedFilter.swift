@@ -14,6 +14,7 @@ class BreedFilter: UIViewController {
     private let filterTitle: UILabel! = UILabel()
     private let scrollView: UIScrollView! = UIScrollView()
     private let checkBoxesStackView: UIStackView! = UIStackView()
+    private let applyButton: UIButton! = UIButton()
     private let dataStorage = DataStorage()
 
     override func viewDidLoad() {
@@ -27,12 +28,14 @@ class BreedFilter: UIViewController {
 
         initializeTitle()
         initializeCheckBoxesStackView()
+        initializeApplyButton()
         createCheckBoxes(catModels)
 
         addSubviews()
 
         setupContainer()
         setupTitle()
+        setupApplyButton()
         setupScrollView()
         setupCheckBoxesStackView()
     }
@@ -88,6 +91,22 @@ class BreedFilter: UIViewController {
         checkBoxesStackView.alignment = .leading
     }
 
+    private func initializeApplyButton() {
+        applyButton.backgroundColor = .blue
+        applyButton.setTitle("Apply filter", for: .normal)
+        applyButton.setTitleColor(.white, for: .normal)
+        applyButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        applyButton.contentHorizontalAlignment = .center
+    }
+
+    private func setupApplyButton() {
+        applyButton.translatesAutoresizingMaskIntoConstraints = false
+        applyButton.leftAnchor.constraint(equalTo: container.leftAnchor).isActive = true
+        applyButton.bottomAnchor.constraint(equalTo: container.bottomAnchor).isActive = true
+        applyButton.rightAnchor.constraint(equalTo: container.rightAnchor).isActive = true
+        applyButton.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.07).isActive = true
+    }
+
     private func setupCheckBox(_ checkBox: UIButton) {
         checkBox.translatesAutoresizingMaskIntoConstraints = false
         checkBox.widthAnchor.constraint(equalTo: checkBoxesStackView.widthAnchor).isActive = true
@@ -123,6 +142,7 @@ class BreedFilter: UIViewController {
         view.addSubview(container)
         container.addSubview(filterTitle)
         container.addSubview(scrollView)
+        container.addSubview(applyButton)
         scrollView.addSubview(checkBoxesStackView)
     }
 }

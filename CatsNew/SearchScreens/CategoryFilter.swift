@@ -14,6 +14,7 @@ class CategoryFilter: UIViewController {
     private let filterTitle: UILabel! = UILabel()
     private let scrollView: UIScrollView! = UIScrollView()
     private let radioButtonsStackView: UIStackView! = UIStackView()
+    private let applyButton: UIButton! = UIButton()
     private let dataStorage = DataStorage()
     private var radioButtons: [UIButton] = []
 
@@ -28,12 +29,14 @@ class CategoryFilter: UIViewController {
 
         initializeTitle()
         initializeRadioButtonsStackView()
+        initializeApplyButton()
         createRadioButtons(catModels)
 
         addSubviews()
 
         setupContainer()
         setupTitle()
+        setupApplyButton()
         setupScrollView()
         setupRadioButtonsStackView()
     }
@@ -131,10 +134,27 @@ class CategoryFilter: UIViewController {
         }
     }
 
+    private func initializeApplyButton() {
+        applyButton.backgroundColor = .blue
+        applyButton.setTitle("Apply filter", for: .normal)
+        applyButton.setTitleColor(.white, for: .normal)
+        applyButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        applyButton.contentHorizontalAlignment = .center
+    }
+
+    private func setupApplyButton() {
+        applyButton.translatesAutoresizingMaskIntoConstraints = false
+        applyButton.leftAnchor.constraint(equalTo: container.leftAnchor).isActive = true
+        applyButton.bottomAnchor.constraint(equalTo: container.bottomAnchor).isActive = true
+        applyButton.rightAnchor.constraint(equalTo: container.rightAnchor).isActive = true
+        applyButton.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.07).isActive = true
+    }
+
     private func addSubviews() {
         view.addSubview(container)
         container.addSubview(filterTitle)
         container.addSubview(scrollView)
         scrollView.addSubview(radioButtonsStackView)
+        container.addSubview(applyButton)
     }
 }
