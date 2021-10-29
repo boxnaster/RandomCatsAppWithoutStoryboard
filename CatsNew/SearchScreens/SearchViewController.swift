@@ -104,13 +104,15 @@ class SearchViewController: UIViewController {
     }
 
     @objc func flipBreedFilterButton() {
-        let breedFilterView = BreedFilterView()
-        self.view.addSubview(breedFilterView)
+        let breedFilter = BreedFilter()
+        breedFilter.modalPresentationStyle = .overFullScreen
+        present(breedFilter, animated: true, completion: nil)
     }
 
     @objc func flipCategoryFilterButton() {
-        let categoryFilterView = CategoryFilterView()
-        self.view.addSubview(categoryFilterView)
+        let categoryFilter = CategoryFilter()
+        categoryFilter.modalPresentationStyle = .overFullScreen
+        present(categoryFilter, animated: true, completion: nil)
     }
 
     private func addSubviews() {

@@ -8,24 +8,23 @@
 import Foundation
 import UIKit
 
-class CategoryFilterView: UIView {
+class CategoryFilter: UIViewController {
 
     let container: UIView! = UIView()
-    let title: UILabel! = UILabel()
+    let filterTitle: UILabel! = UILabel()
     let scrollView: UIScrollView! = UIScrollView()
     let radioButtonsStackView: UIStackView! = UIStackView()
     let dataStorage = DataStorage()
     var radioButtons: [UIButton] = []
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
         let catModels = dataStorage.getCats()
-        self.frame = UIScreen.main.bounds
-        self.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOutside))
-        self.addGestureRecognizer(tapGesture)
+        view.addGestureRecognizer(tapGesture)
 
         initializeTitle()
         initializeRadioButtonsStackView()
@@ -39,44 +38,40 @@ class CategoryFilterView: UIView {
         setupRadioButtonsStackView()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     @objc private func tapOutside(_ sender: UITapGestureRecognizer) {
-        let location = sender.location(in: self)
+        let location = sender.location(in: view)
         if container.frame.contains(location) {
             return
         } else {
-            self.removeFromSuperview()
+            dismiss(animated: true, completion: nil)
         }
     }
 
     private func setupContainer() {
         container.backgroundColor = .white
         container.translatesAutoresizingMaskIntoConstraints = false
-        container.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        container.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8).isActive = true
-        container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.75).isActive = true
+        container.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        container.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        container.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8).isActive = true
+        container.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.75).isActive = true
     }
 
     private func setupTitle() {
-        title.translatesAutoresizingMaskIntoConstraints = false
-        title.leftAnchor.constraint(equalTo: container.leftAnchor, constant: 20).isActive = true
-        title.topAnchor.constraint(equalTo: container.topAnchor, constant: 20).isActive = true
+        filterTitle.translatesAutoresizingMaskIntoConstraints = false
+        filterTitle.leftAnchor.constraint(equalTo: container.leftAnchor, constant: 20).isActive = true
+        filterTitle.topAnchor.constraint(equalTo: container.topAnchor, constant: 20).isActive = true
     }
 
     private func initializeTitle() {
-        title.text = "Category"
-        title.textAlignment = .left
+        filterTitle.text = "Category"
+        filterTitle.textAlignment = .left
     }
 
     private func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
         scrollView.widthAnchor.constraint(equalTo: container.widthAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 20).isActive = true
+        scrollView.topAnchor.constraint(equalTo: filterTitle.bottomAnchor, constant: 20).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: container.bottomAnchor).isActive = true
     }
 
@@ -137,8 +132,8 @@ class CategoryFilterView: UIView {
     }
 
     private func addSubviews() {
-        self.addSubview(container)
-        container.addSubview(title)
+        view.addSubview(container)
+        container.addSubview(filterTitle)
         container.addSubview(scrollView)
         scrollView.addSubview(radioButtonsStackView)
     }
