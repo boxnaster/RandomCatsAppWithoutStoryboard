@@ -64,6 +64,10 @@ class UploadViewController: UIViewController, UIImagePickerControllerDelegate, U
         plusButton.addTarget(self, action: #selector(flipPlusButton), for: .touchUpInside)
     }
 
+    @objc private func flipDeleteButton() {
+
+    }
+
     private func setupCollectionView() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -129,6 +133,17 @@ extension UploadViewController: UICollectionViewDataSource {
         backgroundImage.layer.cornerRadius = 10
         backgroundImage.clipsToBounds = true
         cell.backgroundView = backgroundImage
+
+        let deleteButton = UIButton()
+        deleteButton.setImage(UIImage(named: "dash-circle.svg"), for: .normal)
+        deleteButton.addTarget(self, action: #selector(flipDeleteButton), for: .touchUpInside)
+
+        cell.addSubview(deleteButton)
+
+        deleteButton.translatesAutoresizingMaskIntoConstraints = false
+        deleteButton.leftAnchor.constraint(equalTo: cell.leftAnchor, constant: 20).isActive = true
+        deleteButton.topAnchor.constraint(equalTo: cell.topAnchor, constant: 20).isActive = true
+
         return cell
     }
 }
