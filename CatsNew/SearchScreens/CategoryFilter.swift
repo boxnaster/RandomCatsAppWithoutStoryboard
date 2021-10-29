@@ -10,12 +10,12 @@ import UIKit
 
 class CategoryFilter: UIViewController {
 
-    let container: UIView! = UIView()
-    let filterTitle: UILabel! = UILabel()
-    let scrollView: UIScrollView! = UIScrollView()
-    let radioButtonsStackView: UIStackView! = UIStackView()
-    let dataStorage = DataStorage()
-    var radioButtons: [UIButton] = []
+    private let container: UIView! = UIView()
+    private let filterTitle: UILabel! = UILabel()
+    private let scrollView: UIScrollView! = UIScrollView()
+    private let radioButtonsStackView: UIStackView! = UIStackView()
+    private let dataStorage = DataStorage()
+    private var radioButtons: [UIButton] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -10,13 +10,13 @@ import UIKit
 
 class SearchViewController: UIViewController {
 
-    let dataStorage = DataStorage()
-    let catModels: [CatModel]
-    let breeds: [String]
-    let categories: [String]
-    var collectionView: UICollectionView!
-    let breedFilterButton: UIButton! = UIButton()
-    let categoryFilterButton: UIButton! = UIButton()
+    private let dataStorage = DataStorage()
+    private let catModels: [CatModel]
+    private let breeds: [String]
+    private let categories: [String]
+    private var collectionView: UICollectionView!
+    private let breedFilterButton: UIButton! = UIButton()
+    private let categoryFilterButton: UIButton! = UIButton()
 
     init() {
         catModels = dataStorage.getCats()
@@ -48,9 +48,9 @@ class SearchViewController: UIViewController {
 
     private func setupCollectionView() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        collectionView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         collectionView.topAnchor.constraint(equalTo: categoryFilterButton.bottomAnchor, constant: 20).isActive = true
-        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
 
@@ -59,6 +59,7 @@ class SearchViewController: UIViewController {
         categoryFilterButton.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         categoryFilterButton.topAnchor.constraint(equalTo: breedFilterButton.bottomAnchor).isActive = true
         categoryFilterButton.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        categoryFilterButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05).isActive = true
     }
 
     private func setupBreedFilterButton() {
@@ -66,6 +67,7 @@ class SearchViewController: UIViewController {
         breedFilterButton.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         breedFilterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         breedFilterButton.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        breedFilterButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05).isActive = true
     }
 
     private func initializeBreedFilterButton() {
@@ -75,7 +77,7 @@ class SearchViewController: UIViewController {
         breedFilterButton.contentHorizontalAlignment = .left
         breedFilterButton.titleLabel?.numberOfLines = 1
         breedFilterButton.titleLabel?.lineBreakMode = .byTruncatingTail
-        breedFilterButton.backgroundColor = UIColor(red: 245 / 255, green: 245 / 255, blue: 220 / 255, alpha: 1)
+        breedFilterButton.backgroundColor = UIColor(red: 255 / 255, green: 235 / 255, blue: 220 / 255, alpha: 1)
         breedFilterButton.layer.borderWidth = 0.5
         breedFilterButton.layer.borderColor = UIColor.gray.cgColor
         breedFilterButton.addTarget(self, action: #selector(flipBreedFilterButton), for: .touchUpInside)
@@ -88,7 +90,7 @@ class SearchViewController: UIViewController {
         categoryFilterButton.contentHorizontalAlignment = .left
         categoryFilterButton.titleLabel?.numberOfLines = 1
         categoryFilterButton.titleLabel?.lineBreakMode = .byTruncatingTail
-        categoryFilterButton.backgroundColor = UIColor(red: 245 / 255, green: 245 / 255, blue: 220 / 255, alpha: 1)
+        categoryFilterButton.backgroundColor = UIColor(red: 255 / 255, green: 235 / 255, blue: 220 / 255, alpha: 1)
         categoryFilterButton.layer.borderWidth = 0.5
         categoryFilterButton.layer.borderColor = UIColor.gray.cgColor
         categoryFilterButton.addTarget(self, action: #selector(flipCategoryFilterButton), for: .touchUpInside)

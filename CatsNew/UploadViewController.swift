@@ -10,10 +10,10 @@ import UIKit
 
 class UploadViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    let dataStorage = DataStorage()
-    var catModels: [CatModel]
-    var collectionView: UICollectionView!
-    let plusButton: UIButton! = UIButton()
+    private let dataStorage = DataStorage()
+    private var catModels: [CatModel]
+    private var collectionView: UICollectionView!
+    private let plusButton: UIButton! = UIButton()
 
     init() {
         catModels = dataStorage.getCats()

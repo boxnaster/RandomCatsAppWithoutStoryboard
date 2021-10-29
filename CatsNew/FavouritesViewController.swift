@@ -10,9 +10,9 @@ import UIKit
 
 class FavouritesViewController: UIViewController {
 
-    let dataStorage = DataStorage()
-    var catModels: [CatModel]
-    var collectionView: UICollectionView!
+    private let dataStorage = DataStorage()
+    private var catModels: [CatModel]
+    private var collectionView: UICollectionView!
 
     init() {
         catModels = dataStorage.getCats()
