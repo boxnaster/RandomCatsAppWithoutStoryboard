@@ -83,7 +83,7 @@ extension FavouritesViewController: UICollectionViewDelegateFlowLayout {
 
 extension FavouritesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let singleImageViewController = SingleImageViewController(catModel: catModels[indexPath.item])
-        navigationController?.pushViewController(singleImageViewController, animated: true)
+       // let singleImageViewController = SingleImageViewController(catModel: catModels[indexPath.item])
+     //   navigationController?.pushViewController(singleImageViewController, animated: true)
     }
 }

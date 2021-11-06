@@ -10,7 +10,9 @@ import UIKit
 
 class SingleImageViewController: UIViewController {
 
-    private var catModel: CatModel
+    private let catModel: CatModel
+    private let dataStorage = DataStorage()
+    private let catId: String
     private var scrollView: UIScrollView! = UIScrollView()
     private var contentView: UIView! = UIView()
     private var imageView: UIImageView! = UIImageView()
@@ -18,8 +20,19 @@ class SingleImageViewController: UIViewController {
     private var breedsLabel: UILabel! = UILabel()
     private var categoryLabel: UILabel! = UILabel()
 
-    init(catModel: CatModel) {
-        self.catModel = catModel
+    private var searchSpinner: UIActivityIndicatorView! = UIActivityIndicatorView(style: .large)
+    private let apiKey = "66597ab0-3a1d-444d-ad96-8e393fb9cf9e"
+    private let subId = UIDevice.current.identifierForVendor?.uuidString
+    private let endpoint = "https://api.thecatapi.com/v1/images/"
+    private var isSearching = false
+    private var cat: Cat
+    private var searchSession: URLSession?
+    private var searchTask: URLSessionDataTask?
+
+    init(catId: String) {
+        self.catId = catId
+        cat = Cat(identifier: "", url: "", width: 0, height: 0, image: UIImage())
+        catModel = dataStorage.getCats()[0]
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -31,21 +44,100 @@ class SingleImageViewController: UIViewController {
 
         super.viewDidLoad()
 
-        self.title = catModel.name
+        self.title = cat.identifier
         self.view.backgroundColor = .white
 
         initializeImageView()
         initializeBreedsLabel()
         initializeCategoryLabel()
+        initializeSearchSpinner()
 
         addSubviews()
 
         setupScrollView()
         setupContentView()
-        setupImageView()
         setupLikeButton()
         setupBreedsLabel()
         setupCategoryLabel()
+
+        searchSession = URLSession(configuration: .default)
+        getCat()
+    }
+
+    private func getCat() {
+        searchTask?.cancel()
+        searchTask = nil
+
+        let urlComponents = prepareAndGetUrlComponents()
+        guard let url = urlComponents.url else {
+            return
+        }
+        isSearching = true
+        changeSpinnerState()
+        let localTask = searchSession?.dataTask(
+            with: url,
+            completionHandler: { [weak self] (responseData: Data?, response: URLResponse?, error: Error?) in
+                DispatchQueue.main.async(execute: { [weak self] in
+                    guard let strongSelf = self else {
+                        return
+                    }
+                    let result = CatsParser.parseCat(responseData: responseData, response: response, error: error)
+                    switch result {
+                    case .success(let parsedCat):
+                        strongSelf.cat = parsedCat
+                        let url = URL(string: strongSelf.cat.url)
+                        let data = try? Data(contentsOf: url!)
+                        let image = UIImage(data: data!)
+                        strongSelf.imageView.image = image
+                        strongSelf.setupImageView()
+                    case .failure(let error):
+                        strongSelf.presentError(error)
+                    }
+                    strongSelf.isSearching = false
+                    strongSelf.changeSpinnerState()
+                })
+            })
+        searchTask = localTask
+        localTask?.resume()
+
+    }
+
+    private func prepareAndGetUrlComponents() -> URLComponents {
+        guard var urlComponents = URLComponents(string: endpoint + catId) else {
+            return URLComponents()
+        }
+        var queryItems: [URLQueryItem] = urlComponents.queryItems ?? []
+        queryItems.append(URLQueryItem(name: "sub_id", value: subId))
+        queryItems.append(URLQueryItem(name: "api-key", value: apiKey))
+        queryItems.append(URLQueryItem(name: "include_vote", value: ""))
+        queryItems.append(URLQueryItem(name: "include_favourite", value: ""))
+        urlComponents.queryItems = queryItems
+
+        return urlComponents
+    }
+
+    private func presentError(_ error: Error) {
+        let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
+                                      message: error.localizedDescription,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""),
+                                      style: .default,
+                                      handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+
+    private func changeSpinnerState() {
+        if isSearching {
+            searchSpinner.startAnimating()
+        } else {
+            searchSpinner.stopAnimating()
+        }
+    }
+
+    private func initializeSearchSpinner() {
+        searchSpinner.hidesWhenStopped = true
+        searchSpinner.stopAnimating()
+        searchSpinner.center = view.center
     }
 
     @objc func imageTapped() {
@@ -55,7 +147,6 @@ class SingleImageViewController: UIViewController {
     }
 
     private func initializeImageView() {
-        imageView.image = catModel.image
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(tapGestureRecognizer)
@@ -78,12 +169,13 @@ class SingleImageViewController: UIViewController {
     }
 
     private func addSubviews() {
-        self.view.addSubview(scrollView)
+        view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(imageView)
         contentView.addSubview(likeButton)
         contentView.addSubview(breedsLabel)
         contentView.addSubview(categoryLabel)
+        contentView.addSubview(searchSpinner)
     }
 
     private func setupScrollView() {
@@ -107,14 +199,7 @@ class SingleImageViewController: UIViewController {
         imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
         imageView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
         imageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-
-        guard let catImage = imageView.image else {
-            return
-        }
-
-        imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor,
-                                         multiplier: (catImage.size.width) / (catImage.size.height),
-                                         constant: 0.0).isActive = true
+        imageView.contentMode = .scaleAspectFit
     }
 
     private func setupLikeButton() {

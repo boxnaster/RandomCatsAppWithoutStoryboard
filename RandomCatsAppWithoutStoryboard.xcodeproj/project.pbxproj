@@ -18,6 +18,12 @@
 		C704227627175C9E00ACF67A /* UploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C704227527175C9E00ACF67A /* UploadViewController.swift */; };
 		C7042285271A11BE00ACF67A /* CatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7042284271A11BE00ACF67A /* CatModel.swift */; };
 		C7042292271A2F3200ACF67A /* DataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7042291271A2F3100ACF67A /* DataStorage.swift */; };
+		C752BDA12731B3F00086582A /* Breed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C752BDA02731B3F00086582A /* Breed.swift */; };
+		C752BDA42731BAE60086582A /* Cat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C752BDA32731BAE60086582A /* Cat.swift */; };
+		C752BDA72731BD600086582A /* CatsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C752BDA62731BD600086582A /* CatsParser.swift */; };
+		C752BDAA2731C0D00086582A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = C752BDA92731C0D00086582A /* Category.swift */; };
+		C752BDB327356ED50086582A /* CategoriesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C752BDB227356ED50086582A /* CategoriesParser.swift */; };
+		C752BDB627356EE20086582A /* BreedsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C752BDB527356EE20086582A /* BreedsParser.swift */; };
 		C7957EBC2723112F00E69C75 /* BreedFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7957EBB2723112F00E69C75 /* BreedFilter.swift */; };
 		C7957EC2272414B000E69C75 /* CategoryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7957EC1272414B000E69C75 /* CategoryFilter.swift */; };
 		C7957ECC27272C1E00E69C75 /* LikeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7957ECB27272C1E00E69C75 /* LikeButton.swift */; };
@@ -38,6 +44,12 @@
 		C704227527175C9E00ACF67A /* UploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewController.swift; sourceTree = "<group>"; };
 		C7042284271A11BE00ACF67A /* CatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatModel.swift; sourceTree = "<group>"; };
 		C7042291271A2F3100ACF67A /* DataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorage.swift; sourceTree = "<group>"; };
+		C752BDA02731B3F00086582A /* Breed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Breed.swift; sourceTree = "<group>"; };
+		C752BDA32731BAE60086582A /* Cat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cat.swift; sourceTree = "<group>"; };
+		C752BDA62731BD600086582A /* CatsParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatsParser.swift; sourceTree = "<group>"; };
+		C752BDA92731C0D00086582A /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		C752BDB227356ED50086582A /* CategoriesParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesParser.swift; sourceTree = "<group>"; };
+		C752BDB527356EE20086582A /* BreedsParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedsParser.swift; sourceTree = "<group>"; };
 		C7957EBB2723112F00E69C75 /* BreedFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedFilter.swift; sourceTree = "<group>"; };
 		C7957EC1272414B000E69C75 /* CategoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilter.swift; sourceTree = "<group>"; };
 		C7957ECB27272C1E00E69C75 /* LikeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeButton.swift; sourceTree = "<group>"; };
@@ -74,6 +86,7 @@
 		C704224E27160A2B00ACF67A /* CatsNew */ = {
 			isa = PBXGroup;
 			children = (
+				C752BDB8273655E80086582A /* Parsers */,
 				C7957ED02729AAB400E69C75 /* Storage */,
 				C704228F271A281400ACF67A /* SearchScreens */,
 				C704228E271A27A500ACF67A /* Models */,
@@ -95,6 +108,9 @@
 			isa = PBXGroup;
 			children = (
 				C7042284271A11BE00ACF67A /* CatModel.swift */,
+				C752BDA02731B3F00086582A /* Breed.swift */,
+				C752BDA32731BAE60086582A /* Cat.swift */,
+				C752BDA92731C0D00086582A /* Category.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -108,6 +124,16 @@
 				C7957ECB27272C1E00E69C75 /* LikeButton.swift */,
 			);
 			path = SearchScreens;
+			sourceTree = "<group>";
+		};
+		C752BDB8273655E80086582A /* Parsers */ = {
+			isa = PBXGroup;
+			children = (
+				C752BDA62731BD600086582A /* CatsParser.swift */,
+				C752BDB227356ED50086582A /* CategoriesParser.swift */,
+				C752BDB527356EE20086582A /* BreedsParser.swift */,
+			);
+			name = Parsers;
 			sourceTree = "<group>";
 		};
 		C7957ED02729AAB400E69C75 /* Storage */ = {
@@ -210,17 +236,23 @@
 			files = (
 				C704227327175B0700ACF67A /* FavouritesViewController.swift in Sources */,
 				C7957EBC2723112F00E69C75 /* BreedFilter.swift in Sources */,
+				C752BDA42731BAE60086582A /* Cat.swift in Sources */,
 				C704227027175AEA00ACF67A /* SearchViewController.swift in Sources */,
+				C752BDB327356ED50086582A /* CategoriesParser.swift in Sources */,
 				C704226A2716153A00ACF67A /* SingleImageViewController.swift in Sources */,
 				C7957ECC27272C1E00E69C75 /* LikeButton.swift in Sources */,
 				C7042292271A2F3200ACF67A /* DataStorage.swift in Sources */,
 				C704227627175C9E00ACF67A /* UploadViewController.swift in Sources */,
 				C7042285271A11BE00ACF67A /* CatModel.swift in Sources */,
+				C752BDA12731B3F00086582A /* Breed.swift in Sources */,
 				C7957EDE272AF9DA00E69C75 /* ZoomableImage.swift in Sources */,
+				C752BDAA2731C0D00086582A /* Category.swift in Sources */,
 				C704225027160A2B00ACF67A /* AppDelegate.swift in Sources */,
 				C704226D27175A8000ACF67A /* TabBarController.swift in Sources */,
 				C704225227160A2B00ACF67A /* SceneDelegate.swift in Sources */,
+				C752BDB627356EE20086582A /* BreedsParser.swift in Sources */,
 				C7957EC2272414B000E69C75 /* CategoryFilter.swift in Sources */,
+				C752BDA72731BD600086582A /* CatsParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
