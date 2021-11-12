@@ -9,12 +9,8 @@ import Foundation
 import UIKit
 
 class SingleImageViewController: UIViewController {
-
- //   private let catModel: CatModel
- //   private let dataStorage = DataStorage()
     private let catId: String
     private var scrollView: UIScrollView! = UIScrollView()
- //   private var contentView: UIView! = UIView()
     private var imageView: UIImageView! = UIImageView()
     private var likeButton = LikeButton()
     private var breedsLabel: UILabel! = UILabel()
@@ -27,12 +23,10 @@ class SingleImageViewController: UIViewController {
     private var isSearching = false
     private var cat: Cat
     private var searchSession: URLSession?
-    private var searchTask: URLSessionDataTask?
 
     init(catId: String) {
         self.catId = catId
         cat = Cat(identifier: "", url: "", width: 0, height: 0, image: UIImage(), breeds: [], categories: [])
-     //   catModel = dataStorage.getCats()[0]
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -44,27 +38,20 @@ class SingleImageViewController: UIViewController {
 
         super.viewDidLoad()
 
-        self.title = cat.identifier
+        self.title = catId
         self.view.backgroundColor = .white
 
         searchSession = URLSession(configuration: .default)
         getCat()
 
         initializeImageView()
-     //   initializeBreedsLabel()
-     //   initializeCategoryLabel()
-        initializeSearchSpinner()
 
         addSubviews()
 
         setupScrollView()
-      //  setupContentView()
         setupLikeButton()
         setupBreedsLabel()
         setupCategoryLabel()
-
-      //  searchSession = URLSession(configuration: .default)
-     //   getCat()
     }
 
     private func getCat() {
@@ -87,11 +74,13 @@ class SingleImageViewController: UIViewController {
                         strongSelf.cat = parsedCat
                         let url = URL(string: strongSelf.cat.url)
                         let data = try? Data(contentsOf: url!)
-                        let image = UIImage(data: data!)
+                        let image = UIImage(data: data!, scale: CGFloat(strongSelf.cat.width) / strongSelf.view.frame.width)
                         strongSelf.imageView.image = image
                         strongSelf.setupImageView()
+                        strongSelf.initializeImageView()
                         strongSelf.initializeBreedsLabel()
                         strongSelf.initializeCategoryLabel()
+                        strongSelf.initializeSearchSpinner()
                     case .failure(let error):
                         strongSelf.presentError(error)
                     }
@@ -99,7 +88,6 @@ class SingleImageViewController: UIViewController {
                     strongSelf.changeSpinnerState()
                 })
             })
-      //  searchTask = localTask
         localTask?.resume()
 
     }
@@ -185,12 +173,6 @@ class SingleImageViewController: UIViewController {
         scrollView.addSubview(breedsLabel)
         scrollView.addSubview(categoryLabel)
         scrollView.addSubview(searchSpinner)
-//        scrollView.addSubview(contentView)
-//        contentView.addSubview(imageView)
-//        contentView.addSubview(likeButton)
-//        contentView.addSubview(breedsLabel)
-//        contentView.addSubview(categoryLabel)
-//        contentView.addSubview(searchSpinner)
     }
 
     private func setupScrollView() {
@@ -201,64 +183,30 @@ class SingleImageViewController: UIViewController {
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
-//    private func setupContentView() {
-//        contentView.translatesAutoresizingMaskIntoConstraints = false
-//        contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-//        contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
-//        contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-//        contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
-//    }
-
     private func setupImageView() {
         imageView.translatesAutoresizingMaskIntoConstraints = false
-//        imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
-//        imageView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
-//        imageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-//        imageView.contentMode = .scaleAspectFit
-       // let size = UIScreen.main.bounds
-       // imageView.frame = CGRect(x: 0.0, y: 0.0, width: size.width, height: size.height)
-
-
-      //  imageView.frame = CGRect(x: 0.0, y: 0.0, width: view.frame.width, height: 100.0)
-      //  imageView.contentMode = .top
-        imageView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
- //       imageView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        imageView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-
         imageView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-       // imageView.topAnchor.constraint(equalTo: scrollView.topAnchor).priority = .defaultHigh
-       // imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-       // imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-       // imageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        imageView.contentMode = .top
-       // imageView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-       // imageView.bottomAnchor.constraint(equalTo: likeButton.topAnchor, constant: 20).isActive = true
+        imageView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
     }
 
     private func setupLikeButton() {
         likeButton.translatesAutoresizingMaskIntoConstraints = false
- //       likeButton.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
         likeButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 20).isActive = true
         likeButton.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20).isActive = true
     }
 
     private func setupBreedsLabel() {
         breedsLabel.translatesAutoresizingMaskIntoConstraints = false
-  //      breedsLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
         breedsLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 20).isActive = true
         breedsLabel.topAnchor.constraint(equalTo: likeButton.bottomAnchor, constant: 20).isActive = true
-   //     breedsLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 20).isActive = true
         breedsLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: 20).isActive = true
     }
 
     private func setupCategoryLabel() {
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
-   //     categoryLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
         categoryLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 20).isActive = true
         categoryLabel.topAnchor.constraint(equalTo: breedsLabel.bottomAnchor, constant: 20).isActive = true
-    //    categoryLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 20).isActive = true
         categoryLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: 20).isActive = true
-    //    categoryLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        categoryLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        categoryLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20).isActive = true
     }
 }

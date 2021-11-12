@@ -14,6 +14,7 @@ class BreedFilter: UIViewController {
     private let filterTitle: UILabel! = UILabel()
     private var tableView: UITableView! = UITableView()
     private let applyButton: UIButton! = UIButton()
+    private let clearAllButton: UIButton! = UIButton()
 
     private var searchSpinner: UIActivityIndicatorView! = UIActivityIndicatorView(style: .large)
     private let apiKey = "66597ab0-3a1d-444d-ad96-8e393fb9cf9e"
@@ -38,11 +39,13 @@ class BreedFilter: UIViewController {
         initializeTitle()
         initializeApplyButton()
         initializeTableView()
+        initializeClearAllButton()
 
         addSubviews()
 
         setupContainer()
         setupTitle()
+        setupClearAllButton()
         setupApplyButton()
         setupTableView()
 
@@ -150,6 +153,23 @@ class BreedFilter: UIViewController {
         filterTitle.textAlignment = .left
     }
 
+    private func initializeClearAllButton() {
+        clearAllButton.setTitle("clear all", for: .normal)
+        clearAllButton.setTitleColor(.blue, for: .normal)
+        clearAllButton.addTarget(self, action: #selector(flipClearAllButton), for: .touchUpInside)
+    }
+
+    private func setupClearAllButton() {
+        clearAllButton.translatesAutoresizingMaskIntoConstraints = false
+        clearAllButton.rightAnchor.constraint(equalTo: container.rightAnchor, constant: -20).isActive = true
+        clearAllButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 10).isActive = true
+    }
+
+    @objc private func flipClearAllButton() {
+        DataStorage.selectedBreeds = []
+        tableView.reloadData()
+    }
+
     private func initializeTableView() {
         tableView = UITableView()
         tableView.dataSource = self
@@ -177,9 +197,6 @@ class BreedFilter: UIViewController {
     }
 
     @objc func flipApplyButton() {
-        for selectedRow in DataStorage.selectedBreedRows {
-            DataStorage.selectedBreeds.append(breeds[selectedRow])
-        }
         NotificationCenter.default.post(name: NSNotification.Name("RefreshCats"), object: nil)
         dismiss(animated: true, completion: nil)
     }
@@ -195,9 +212,10 @@ class BreedFilter: UIViewController {
     private func addSubviews() {
         view.addSubview(container)
         container.addSubview(filterTitle)
+        container.addSubview(clearAllButton)
         container.addSubview(tableView)
         container.addSubview(applyButton)
-        tableView.addSubview(searchSpinner)
+        container.addSubview(searchSpinner)
     }
 }
 
@@ -208,15 +226,11 @@ extension BreedFilter: UITableViewDataSource {
                     fatalError("Can't dequeue reusable cell.")
                 }
 
-        if indexPath.row < breeds.count {
-            cell.breedName.text = breeds[indexPath.row].name
+        let breed = breeds[indexPath.row]
 
-            let isRowSelected = DataStorage.selectedBreedRows.contains(indexPath.row)
-            if isRowSelected {
-                cell.checkBoxButton.isSelected = true
-            } else {
-                cell.checkBoxButton.isSelected = false
-            }
+        if indexPath.row < breeds.count {
+            cell.breedName.text = breed.name
+            cell.checkBoxButton.isSelected = DataStorage.selectedBreeds.map { $0.identifier }.contains(breed.identifier)
         }
         return cell
     }
@@ -237,8 +251,14 @@ extension BreedFilter: UITableViewDelegate {
             fatalError("There is no cell at indexPath \(indexPath).")
         }
 
-        cell.checkBoxButton.isSelected = true
-        DataStorage.selectedBreedRows.append(indexPath.row)
+        let breed = breeds[indexPath.row]
+
+        cell.checkBoxButton.isSelected.toggle()
+        if cell.checkBoxButton.isSelected {
+            DataStorage.selectedBreeds.append(breed)
+        } else {
+            DataStorage.selectedBreeds.removeAll { $0.identifier == breed.identifier }
+        }
     }
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -246,10 +266,13 @@ extension BreedFilter: UITableViewDelegate {
             fatalError("There is no cell at indexPath \(indexPath).")
         }
 
-        cell.checkBoxButton.isSelected = false
+        let breed = breeds[indexPath.row]
 
-        if let selectedRowIndex = DataStorage.selectedBreedRows.firstIndex(of: indexPath.row) {
-            DataStorage.selectedBreedRows.remove(at: selectedRowIndex)
+        cell.checkBoxButton.isSelected.toggle()
+        if cell.checkBoxButton.isSelected {
+            DataStorage.selectedBreeds.append(breed)
+        } else {
+            DataStorage.selectedBreeds.removeAll { $0.identifier == breed.identifier }
         }
     }
 

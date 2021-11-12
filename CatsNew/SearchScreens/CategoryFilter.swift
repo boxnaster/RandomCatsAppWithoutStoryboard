@@ -14,6 +14,7 @@ class CategoryFilter: UIViewController {
     private let filterTitle: UILabel! = UILabel()
     private var tableView: UITableView! = UITableView()
     private let applyButton: UIButton! = UIButton()
+    private let clearAllButton: UIButton! = UIButton()
 
     private var searchSpinner: UIActivityIndicatorView! = UIActivityIndicatorView(style: .large)
     private let apiKey = "66597ab0-3a1d-444d-ad96-8e393fb9cf9e"
@@ -36,11 +37,13 @@ class CategoryFilter: UIViewController {
         initializeTitle()
         initializeApplyButton()
         initializeTableView()
+        initializeClearAllButton()
 
         addSubviews()
 
         setupContainer()
         setupTitle()
+        setupClearAllButton()
         setupApplyButton()
         setupTableView()
 
@@ -146,6 +149,23 @@ class CategoryFilter: UIViewController {
         filterTitle.textAlignment = .left
     }
 
+    private func initializeClearAllButton() {
+        clearAllButton.setTitle("clear all", for: .normal)
+        clearAllButton.setTitleColor(.blue, for: .normal)
+        clearAllButton.addTarget(self, action: #selector(flipClearAllButton), for: .touchUpInside)
+    }
+
+    private func setupClearAllButton() {
+        clearAllButton.translatesAutoresizingMaskIntoConstraints = false
+        clearAllButton.rightAnchor.constraint(equalTo: container.rightAnchor, constant: -20).isActive = true
+        clearAllButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 10).isActive = true
+    }
+
+    @objc private func flipClearAllButton() {
+        DataStorage.selectedCategory = nil
+        tableView.reloadData()
+    }
+
     private func initializeTableView() {
         tableView = UITableView()
         tableView.dataSource = self
@@ -173,7 +193,6 @@ class CategoryFilter: UIViewController {
     }
 
     @objc func flipApplyButton() {
-        DataStorage.selectedCategory = categories[DataStorage.selectedCategoryRow!]
         NotificationCenter.default.post(name: NSNotification.Name("RefreshCats"), object: nil)
         dismiss(animated: true, completion: nil)
     }
@@ -189,9 +208,10 @@ class CategoryFilter: UIViewController {
     private func addSubviews() {
         view.addSubview(container)
         container.addSubview(filterTitle)
+        container.addSubview(clearAllButton)
         container.addSubview(tableView)
         container.addSubview(applyButton)
-        tableView.addSubview(searchSpinner)
+        container.addSubview(searchSpinner)
     }
 }
 
@@ -202,14 +222,12 @@ extension CategoryFilter: UITableViewDataSource {
                     fatalError("Can't dequeue reusable cell.")
                 }
 
-        if indexPath.row < categories.count {
-            cell.categoryName.text = categories[indexPath.row].name
+        let category = categories[indexPath.row]
+        let isSelected = DataStorage.selectedCategory?.identifier == category.identifier
 
-            if DataStorage.selectedCategoryRow == indexPath.row {
-                cell.radioButton.isSelected = true
-            } else {
-                cell.radioButton.isSelected = false
-            }
+        if indexPath.row < categories.count {
+            cell.categoryName.text = category.name
+            cell.radioButton.isSelected = isSelected
         }
 
         return cell
@@ -231,8 +249,9 @@ extension CategoryFilter: UITableViewDelegate {
             fatalError("There is no cell at indexPath \(indexPath).")
         }
 
+        let category = categories[indexPath.row]
         cell.radioButton.isSelected = true
-        DataStorage.selectedCategoryRow = indexPath.row
+        DataStorage.selectedCategory = category
     }
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -241,6 +260,6 @@ extension CategoryFilter: UITableViewDelegate {
         }
 
         cell.radioButton.isSelected = false
-        DataStorage.selectedCategoryRow = -1
+        DataStorage.selectedCategory = nil
     }
 }

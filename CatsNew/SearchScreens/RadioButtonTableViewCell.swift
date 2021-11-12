@@ -23,12 +23,6 @@ class RadioButtonTableViewCell: UITableViewCell {
         setupCategoryName()
     }
 
-//    override func prepareForReuse() {
-//        super.prepareForReuse()
-//        categoryName = nil
-//        radioButton.isSelected = false
-//    }
-
     private func setupRadioButton() {
         radioButton.translatesAutoresizingMaskIntoConstraints = false
         radioButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10).isActive = true

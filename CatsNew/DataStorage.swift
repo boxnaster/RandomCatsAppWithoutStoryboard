@@ -17,14 +17,13 @@ class DataStorage {
     CatModel(catId: 4, name: "Musya", image: UIImage(named: "cat4.svg"), isLiked: false, breeds: ["Siamese"], category: "smth"),
     CatModel(catId: 5, name: "Baton", image: UIImage(named: "cat5.svg"), isLiked: false, breeds: ["Simple", "Scottish"], category: "space")]
 
-
     static public var selectedBreeds: [Breed] = []
 
     static public var selectedCategory: Category?
 
-    static public var selectedBreedRows: [Int] = []
+ //   static public var selectedBreedRows: [Int] = []
 
-    static public var selectedCategoryRow: Int?
+ //   static public var selectedCategoryRow: Int?
 
     func getCats() -> [CatModel] {
         return cats

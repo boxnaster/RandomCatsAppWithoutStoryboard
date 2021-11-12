@@ -10,10 +10,6 @@ import UIKit
 
 class SearchViewController: UIViewController {
 
-    private let dataStorage = DataStorage()
-    private let catModels: [CatModel]
-    private let breeds: [String]
-    private let categories: [String]
     private var collectionView: UICollectionView!
     private let breedFilterButton: UIButton! = UIButton()
     private let categoryFilterButton: UIButton! = UIButton()
@@ -21,29 +17,19 @@ class SearchViewController: UIViewController {
     private let apiKey = "66597ab0-3a1d-444d-ad96-8e393fb9cf9e"
     private let endpoint = "https://api.thecatapi.com/v1/images/search"
     private let pageLimit = 10
-    // private var totalItems: Int?
     private var page = 0
     private var isSearching = false
     private var cats: [Cat] = []
     private var searchSession: URLSession?
- //   private var searchTask: URLSessionDataTask?
-
-    init() {
-        catModels = dataStorage.getCats()
-        breeds = Array(Set(catModels.flatMap { Array($0.breeds) }))
-        categories = Array(Set(catModels.map { $0.category }))
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         navigationItem.title = "Random Cats"
         view.backgroundColor = .white
+
+        searchSession = URLSession(configuration: .default)
+        getCats()
 
         initializeSearchSpinner()
         initializeBreedFilterButton()
@@ -56,15 +42,12 @@ class SearchViewController: UIViewController {
         setupCategoryFilterButton()
         setupCollectionView()
 
-        searchSession = URLSession(configuration: .default)
-        getCats()
-
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCats), name: NSNotification.Name("RefreshCats"), object: nil)
     }
 
     @objc private func refreshCats() {
-        breedFilterButton.setTitle("Breed: \(DataStorage.selectedBreeds.map { $0.name }.joined(separator: ", "))", for: .normal)
-        categoryFilterButton.setTitle("Category: \(DataStorage.selectedCategory?.name ?? "")", for: .normal)
+        setBreedFilterButtonTitle()
+        setCategoryFilterButtonTitle()
         cats = []
         page = 0
         getCats()
@@ -107,7 +90,6 @@ class SearchViewController: UIViewController {
                     strongSelf.changeSpinnerState()
                 })
             })
-     //   searchTask = localTask
         localTask?.resume()
     }
 
@@ -179,8 +161,7 @@ class SearchViewController: UIViewController {
     }
 
     private func initializeBreedFilterButton() {
-        // breedFilterButton.setTitle("Breed: \(breeds.joined(separator: ", "))", for: .normal)
-        breedFilterButton.setTitle("Breed: \(DataStorage.selectedBreeds.map { $0.name }.joined(separator: ", "))", for: .normal)
+        setBreedFilterButtonTitle()
         breedFilterButton.setTitleColor(.black, for: .normal)
         breedFilterButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         breedFilterButton.contentHorizontalAlignment = .left
@@ -193,7 +174,7 @@ class SearchViewController: UIViewController {
     }
 
     private func initializeCategoryFilterButton() {
-        categoryFilterButton.setTitle("Category: \(DataStorage.selectedCategory?.name ?? "")", for: .normal)
+        setCategoryFilterButtonTitle()
         categoryFilterButton.setTitleColor(.black, for: .normal)
         categoryFilterButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         categoryFilterButton.contentHorizontalAlignment = .left
@@ -203,6 +184,22 @@ class SearchViewController: UIViewController {
         categoryFilterButton.layer.borderWidth = 0.5
         categoryFilterButton.layer.borderColor = UIColor.gray.cgColor
         categoryFilterButton.addTarget(self, action: #selector(flipCategoryFilterButton), for: .touchUpInside)
+    }
+
+    private func setBreedFilterButtonTitle() {
+        if !DataStorage.selectedBreeds.isEmpty {
+            breedFilterButton.setTitle("Breed: \(DataStorage.selectedBreeds.map { $0.name }.joined(separator: ", "))", for: .normal)
+        } else {
+            breedFilterButton.setTitle("Breed: all", for: .normal)
+        }
+    }
+
+    private func setCategoryFilterButtonTitle() {
+        if DataStorage.selectedCategory != nil {
+            categoryFilterButton.setTitle("Category: \(DataStorage.selectedCategory?.name ?? "")", for: .normal)
+        } else {
+            categoryFilterButton.setTitle("Category: all", for: .normal)
+        }
     }
 
     private func initializeCollectionView() {
