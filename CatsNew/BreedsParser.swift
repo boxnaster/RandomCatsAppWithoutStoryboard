@@ -42,7 +42,7 @@ internal class BreedsParser {
         }
     }
 
-    private static func parseItem(rawItem: [String: Any]) throws -> Breed {
+    public static func parseItem(rawItem: [String: Any]) throws -> Breed {
         guard let identifier = rawItem["id"] as? String,
               let name = rawItem["name"] as? String
         else {

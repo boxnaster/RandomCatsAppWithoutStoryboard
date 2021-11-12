@@ -76,10 +76,16 @@ internal class CatsParser {
         else {
             throw Error.cantParseResponse
         }
+        let rawCategories = rawItem["categories"] as? [[String: Any]] ?? []
+        let rawBreeds = rawItem["breeds"] as? [[String: Any]] ?? []
+        let categories = rawCategories.compactMap { try? CategoriesParser.parseItem(rawItem: $0) }
+        let breeds = rawBreeds.compactMap { try? BreedsParser.parseItem(rawItem: $0) }
         return Cat(identifier: identifier,
                    url: url,
                    width: width,
                    height: height,
-                   image: UIImage())
+                   image: UIImage(),
+                   breeds: breeds,
+                   categories: categories)
     }
 }

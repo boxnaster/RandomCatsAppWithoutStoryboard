@@ -42,7 +42,7 @@ internal class CategoriesParser {
         }
     }
 
-    private static func parseItem(rawItem: [String: Any]) throws -> Category {
+    public static func parseItem(rawItem: [String: Any]) throws -> Category {
         guard let identifier = rawItem["id"] as? Int,
               let name = rawItem["name"] as? String
         else {

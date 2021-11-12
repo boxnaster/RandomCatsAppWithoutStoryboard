@@ -10,8 +10,8 @@ import UIKit
 
 class SingleImageViewController: UIViewController {
 
-    private let catModel: CatModel
-    private let dataStorage = DataStorage()
+ //   private let catModel: CatModel
+ //   private let dataStorage = DataStorage()
     private let catId: String
     private var scrollView: UIScrollView! = UIScrollView()
  //   private var contentView: UIView! = UIView()
@@ -31,8 +31,8 @@ class SingleImageViewController: UIViewController {
 
     init(catId: String) {
         self.catId = catId
-        cat = Cat(identifier: "", url: "", width: 0, height: 0, image: UIImage())
-        catModel = dataStorage.getCats()[0]
+        cat = Cat(identifier: "", url: "", width: 0, height: 0, image: UIImage(), breeds: [], categories: [])
+     //   catModel = dataStorage.getCats()[0]
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -47,9 +47,12 @@ class SingleImageViewController: UIViewController {
         self.title = cat.identifier
         self.view.backgroundColor = .white
 
+        searchSession = URLSession(configuration: .default)
+        getCat()
+
         initializeImageView()
-        initializeBreedsLabel()
-        initializeCategoryLabel()
+     //   initializeBreedsLabel()
+     //   initializeCategoryLabel()
         initializeSearchSpinner()
 
         addSubviews()
@@ -60,8 +63,8 @@ class SingleImageViewController: UIViewController {
         setupBreedsLabel()
         setupCategoryLabel()
 
-        searchSession = URLSession(configuration: .default)
-        getCat()
+      //  searchSession = URLSession(configuration: .default)
+     //   getCat()
     }
 
     private func getCat() {
@@ -87,6 +90,8 @@ class SingleImageViewController: UIViewController {
                         let image = UIImage(data: data!)
                         strongSelf.imageView.image = image
                         strongSelf.setupImageView()
+                        strongSelf.initializeBreedsLabel()
+                        strongSelf.initializeCategoryLabel()
                     case .failure(let error):
                         strongSelf.presentError(error)
                     }
@@ -151,7 +156,11 @@ class SingleImageViewController: UIViewController {
 
     private func initializeBreedsLabel() {
         breedsLabel.numberOfLines = 0
-        breedsLabel.text = "Breeds:\n-\(catModel.breeds.joined(separator: "\n-"))"
+        if !cat.breeds.isEmpty {
+            breedsLabel.text = "Breeds:\n-\(cat.breeds.map { $0.name }.joined(separator: "\n-"))"
+        } else {
+            breedsLabel.text = "Breeds: unknown"
+        }
         breedsLabel.textAlignment = .left
         breedsLabel.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 20)
         breedsLabel.textColor = .black
@@ -159,7 +168,11 @@ class SingleImageViewController: UIViewController {
 
     private func initializeCategoryLabel() {
         categoryLabel.numberOfLines = 0
-        categoryLabel.text = "Category: \(catModel.category)"
+        if !cat.categories.isEmpty {
+            categoryLabel.text = "Category: \(cat.categories.map { $0.name }.joined(separator: "\n-"))"
+        } else {
+            categoryLabel.text = "Category: unknown"
+        }
         categoryLabel.textAlignment = .left
         categoryLabel.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 20)
         categoryLabel.textColor = .black

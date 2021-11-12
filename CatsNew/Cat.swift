@@ -14,12 +14,16 @@ class Cat {
     public let width: Int
     public let height: Int
     public var image: UIImage
+    public let breeds: [Breed]
+    public let categories: [Category]
 
-    init(identifier: String, url: String, width: Int, height: Int, image: UIImage) {
+    init(identifier: String, url: String, width: Int, height: Int, image: UIImage, breeds: [Breed], categories: [Category]) {
         self.identifier = identifier
         self.url = url
         self.width = width
         self.height = height
         self.image = image
+        self.breeds = breeds
+        self.categories = categories
     }
 }
