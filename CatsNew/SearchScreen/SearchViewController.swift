@@ -71,7 +71,7 @@ class SearchViewController: UIViewController {
                         for cat in parsedCats {
                             let url = URL(string: cat.url)
                             let data = try? Data(contentsOf: url!)
-                            let image = UIImage(data: data!)
+                            let image = UIImage(data: data!, scale: CGFloat(cat.width) / strongSelf.view.frame.width)
                             cat.image = image!
                         }
                         var originalCats: [Cat] = []
@@ -207,7 +207,7 @@ class SearchViewController: UIViewController {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(CatCollectionViewCell.self, forCellWithReuseIdentifier: CatCollectionViewCell.cellIdentifier)
         collectionView.backgroundColor = UIColor.white
     }
 
@@ -227,7 +227,7 @@ class SearchViewController: UIViewController {
         view.addSubview(breedFilterButton)
         view.addSubview(categoryFilterButton)
         view.addSubview(collectionView)
-        collectionView.addSubview(searchSpinner)
+        view.addSubview(searchSpinner)
     }
 }
 
@@ -252,7 +252,6 @@ extension SearchViewController: UICollectionViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // переделать на количество элементов page * pageLimit + 5
         if collectionView.contentOffset.y >= collectionView.contentSize.height - collectionView.bounds.size.height {
             if !isSearching {
                 page += 1
@@ -268,15 +267,13 @@ extension SearchViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CatCollectionViewCell.cellIdentifier, for: indexPath)
+                as? CatCollectionViewCell else {
+                    fatalError("Can't dequeue reusable cell.")
+                }
+        let cat = cats[indexPath.item]
         if indexPath.item < cats.count {
-            let cat = cats[indexPath.item]
-            let imageView = UIImageView(image: cat.image)
-            imageView.layer.cornerRadius = 10
-            imageView.clipsToBounds = true
-            cell.backgroundView = imageView
-            // переделать backgroundView
-            // добавить кеш
+            cell.imageView.image = cat.image
         }
         return cell
     }

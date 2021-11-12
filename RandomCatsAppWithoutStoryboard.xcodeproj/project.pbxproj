@@ -20,6 +20,7 @@
 		C7042292271A2F3200ACF67A /* DataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7042291271A2F3100ACF67A /* DataStorage.swift */; };
 		C74241D8273D714E0064DFDB /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74241D7273D714E0064DFDB /* RadioButton.swift */; };
 		C74241DA273D716A0064DFDB /* RadioButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74241D9273D716A0064DFDB /* RadioButtonTableViewCell.swift */; };
+		C74241E0273EFBF90064DFDB /* CatCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74241DF273EFBF90064DFDB /* CatCollectionViewCell.swift */; };
 		C752BDA12731B3F00086582A /* Breed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C752BDA02731B3F00086582A /* Breed.swift */; };
 		C752BDA42731BAE60086582A /* Cat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C752BDA32731BAE60086582A /* Cat.swift */; };
 		C752BDA72731BD600086582A /* CatsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C752BDA62731BD600086582A /* CatsParser.swift */; };
@@ -50,6 +51,7 @@
 		C7042291271A2F3100ACF67A /* DataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorage.swift; sourceTree = "<group>"; };
 		C74241D7273D714E0064DFDB /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
 		C74241D9273D716A0064DFDB /* RadioButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonTableViewCell.swift; sourceTree = "<group>"; };
+		C74241DF273EFBF90064DFDB /* CatCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatCollectionViewCell.swift; sourceTree = "<group>"; };
 		C752BDA02731B3F00086582A /* Breed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Breed.swift; sourceTree = "<group>"; };
 		C752BDA32731BAE60086582A /* Cat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cat.swift; sourceTree = "<group>"; };
 		C752BDA62731BD600086582A /* CatsParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatsParser.swift; sourceTree = "<group>"; };
@@ -94,21 +96,19 @@
 		C704224E27160A2B00ACF67A /* CatsNew */ = {
 			isa = PBXGroup;
 			children = (
+				C74241DE273EFB760064DFDB /* SingleImageScreen */,
 				C752BDB8273655E80086582A /* Parsers */,
 				C7957ED02729AAB400E69C75 /* Storage */,
-				C704228F271A281400ACF67A /* SearchScreens */,
+				C704228F271A281400ACF67A /* SearchScreen */,
 				C704228E271A27A500ACF67A /* Models */,
 				C704224F27160A2B00ACF67A /* AppDelegate.swift */,
 				C704225127160A2B00ACF67A /* SceneDelegate.swift */,
 				C704225827160A3200ACF67A /* Assets.xcassets */,
 				C704225A27160A3200ACF67A /* LaunchScreen.storyboard */,
 				C704225D27160A3200ACF67A /* Info.plist */,
-				C70422692716153A00ACF67A /* SingleImageViewController.swift */,
-				C7957ECB27272C1E00E69C75 /* LikeButton.swift */,
 				C704226C27175A7F00ACF67A /* TabBarController.swift */,
 				C704227527175C9E00ACF67A /* UploadViewController.swift */,
 				C704227227175B0700ACF67A /* FavouritesViewController.swift */,
-				C7957EDD272AF9DA00E69C75 /* ZoomableImage.swift */,
 			);
 			path = CatsNew;
 			sourceTree = "<group>";
@@ -124,18 +124,45 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
-		C704228F271A281400ACF67A /* SearchScreens */ = {
+		C704228F271A281400ACF67A /* SearchScreen */ = {
 			isa = PBXGroup;
 			children = (
+				C74241DD273EFB3A0064DFDB /* CategoryFilter */,
+				C74241DB273EFACC0064DFDB /* BreedFilter */,
 				C704226F27175AEA00ACF67A /* SearchViewController.swift */,
-				C7957EBB2723112F00E69C75 /* BreedFilter.swift */,
-				C7957EC1272414B000E69C75 /* CategoryFilter.swift */,
-				C7B44931273AE049006E6E71 /* CheckBoxTableViewCell.swift */,
+				C74241DF273EFBF90064DFDB /* CatCollectionViewCell.swift */,
+			);
+			path = SearchScreen;
+			sourceTree = "<group>";
+		};
+		C74241DB273EFACC0064DFDB /* BreedFilter */ = {
+			isa = PBXGroup;
+			children = (
 				C7DF9320273C4A3000B3F0AD /* CheckBoxButton.swift */,
+				C7B44931273AE049006E6E71 /* CheckBoxTableViewCell.swift */,
+				C7957EBB2723112F00E69C75 /* BreedFilter.swift */,
+			);
+			name = BreedFilter;
+			sourceTree = "<group>";
+		};
+		C74241DD273EFB3A0064DFDB /* CategoryFilter */ = {
+			isa = PBXGroup;
+			children = (
+				C7957EC1272414B000E69C75 /* CategoryFilter.swift */,
 				C74241D7273D714E0064DFDB /* RadioButton.swift */,
 				C74241D9273D716A0064DFDB /* RadioButtonTableViewCell.swift */,
 			);
-			path = SearchScreens;
+			name = CategoryFilter;
+			sourceTree = "<group>";
+		};
+		C74241DE273EFB760064DFDB /* SingleImageScreen */ = {
+			isa = PBXGroup;
+			children = (
+				C7957ECB27272C1E00E69C75 /* LikeButton.swift */,
+				C70422692716153A00ACF67A /* SingleImageViewController.swift */,
+				C7957EDD272AF9DA00E69C75 /* ZoomableImage.swift */,
+			);
+			path = SingleImageScreen;
 			sourceTree = "<group>";
 		};
 		C752BDB8273655E80086582A /* Parsers */ = {
@@ -267,6 +294,7 @@
 				C704226D27175A8000ACF67A /* TabBarController.swift in Sources */,
 				C704225227160A2B00ACF67A /* SceneDelegate.swift in Sources */,
 				C752BDB627356EE20086582A /* BreedsParser.swift in Sources */,
+				C74241E0273EFBF90064DFDB /* CatCollectionViewCell.swift in Sources */,
 				C7957EC2272414B000E69C75 /* CategoryFilter.swift in Sources */,
 				C752BDA72731BD600086582A /* CatsParser.swift in Sources */,
 			);

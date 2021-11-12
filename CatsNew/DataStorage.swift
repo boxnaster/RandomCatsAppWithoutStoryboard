@@ -21,10 +21,6 @@ class DataStorage {
 
     static public var selectedCategory: Category?
 
- //   static public var selectedBreedRows: [Int] = []
-
- //   static public var selectedCategoryRow: Int?
-
     func getCats() -> [CatModel] {
         return cats
     }
