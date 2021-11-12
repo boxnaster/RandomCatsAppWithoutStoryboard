@@ -18,6 +18,8 @@
 		C704227627175C9E00ACF67A /* UploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C704227527175C9E00ACF67A /* UploadViewController.swift */; };
 		C7042285271A11BE00ACF67A /* CatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7042284271A11BE00ACF67A /* CatModel.swift */; };
 		C7042292271A2F3200ACF67A /* DataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7042291271A2F3100ACF67A /* DataStorage.swift */; };
+		C74241D8273D714E0064DFDB /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74241D7273D714E0064DFDB /* RadioButton.swift */; };
+		C74241DA273D716A0064DFDB /* RadioButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74241D9273D716A0064DFDB /* RadioButtonTableViewCell.swift */; };
 		C752BDA12731B3F00086582A /* Breed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C752BDA02731B3F00086582A /* Breed.swift */; };
 		C752BDA42731BAE60086582A /* Cat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C752BDA32731BAE60086582A /* Cat.swift */; };
 		C752BDA72731BD600086582A /* CatsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C752BDA62731BD600086582A /* CatsParser.swift */; };
@@ -28,6 +30,8 @@
 		C7957EC2272414B000E69C75 /* CategoryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7957EC1272414B000E69C75 /* CategoryFilter.swift */; };
 		C7957ECC27272C1E00E69C75 /* LikeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7957ECB27272C1E00E69C75 /* LikeButton.swift */; };
 		C7957EDE272AF9DA00E69C75 /* ZoomableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7957EDD272AF9DA00E69C75 /* ZoomableImage.swift */; };
+		C7B44932273AE049006E6E71 /* CheckBoxTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B44931273AE049006E6E71 /* CheckBoxTableViewCell.swift */; };
+		C7DF9321273C4A3000B3F0AD /* CheckBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DF9320273C4A3000B3F0AD /* CheckBoxButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +48,8 @@
 		C704227527175C9E00ACF67A /* UploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewController.swift; sourceTree = "<group>"; };
 		C7042284271A11BE00ACF67A /* CatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatModel.swift; sourceTree = "<group>"; };
 		C7042291271A2F3100ACF67A /* DataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorage.swift; sourceTree = "<group>"; };
+		C74241D7273D714E0064DFDB /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
+		C74241D9273D716A0064DFDB /* RadioButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonTableViewCell.swift; sourceTree = "<group>"; };
 		C752BDA02731B3F00086582A /* Breed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Breed.swift; sourceTree = "<group>"; };
 		C752BDA32731BAE60086582A /* Cat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cat.swift; sourceTree = "<group>"; };
 		C752BDA62731BD600086582A /* CatsParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatsParser.swift; sourceTree = "<group>"; };
@@ -54,6 +60,8 @@
 		C7957EC1272414B000E69C75 /* CategoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilter.swift; sourceTree = "<group>"; };
 		C7957ECB27272C1E00E69C75 /* LikeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeButton.swift; sourceTree = "<group>"; };
 		C7957EDD272AF9DA00E69C75 /* ZoomableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImage.swift; sourceTree = "<group>"; };
+		C7B44931273AE049006E6E71 /* CheckBoxTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxTableViewCell.swift; sourceTree = "<group>"; };
+		C7DF9320273C4A3000B3F0AD /* CheckBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +104,7 @@
 				C704225A27160A3200ACF67A /* LaunchScreen.storyboard */,
 				C704225D27160A3200ACF67A /* Info.plist */,
 				C70422692716153A00ACF67A /* SingleImageViewController.swift */,
+				C7957ECB27272C1E00E69C75 /* LikeButton.swift */,
 				C704226C27175A7F00ACF67A /* TabBarController.swift */,
 				C704227527175C9E00ACF67A /* UploadViewController.swift */,
 				C704227227175B0700ACF67A /* FavouritesViewController.swift */,
@@ -121,7 +130,10 @@
 				C704226F27175AEA00ACF67A /* SearchViewController.swift */,
 				C7957EBB2723112F00E69C75 /* BreedFilter.swift */,
 				C7957EC1272414B000E69C75 /* CategoryFilter.swift */,
-				C7957ECB27272C1E00E69C75 /* LikeButton.swift */,
+				C7B44931273AE049006E6E71 /* CheckBoxTableViewCell.swift */,
+				C7DF9320273C4A3000B3F0AD /* CheckBoxButton.swift */,
+				C74241D7273D714E0064DFDB /* RadioButton.swift */,
+				C74241D9273D716A0064DFDB /* RadioButtonTableViewCell.swift */,
 			);
 			path = SearchScreens;
 			sourceTree = "<group>";
@@ -238,14 +250,18 @@
 				C7957EBC2723112F00E69C75 /* BreedFilter.swift in Sources */,
 				C752BDA42731BAE60086582A /* Cat.swift in Sources */,
 				C704227027175AEA00ACF67A /* SearchViewController.swift in Sources */,
+				C7DF9321273C4A3000B3F0AD /* CheckBoxButton.swift in Sources */,
 				C752BDB327356ED50086582A /* CategoriesParser.swift in Sources */,
 				C704226A2716153A00ACF67A /* SingleImageViewController.swift in Sources */,
 				C7957ECC27272C1E00E69C75 /* LikeButton.swift in Sources */,
 				C7042292271A2F3200ACF67A /* DataStorage.swift in Sources */,
 				C704227627175C9E00ACF67A /* UploadViewController.swift in Sources */,
 				C7042285271A11BE00ACF67A /* CatModel.swift in Sources */,
+				C74241D8273D714E0064DFDB /* RadioButton.swift in Sources */,
 				C752BDA12731B3F00086582A /* Breed.swift in Sources */,
 				C7957EDE272AF9DA00E69C75 /* ZoomableImage.swift in Sources */,
+				C7B44932273AE049006E6E71 /* CheckBoxTableViewCell.swift in Sources */,
+				C74241DA273D716A0064DFDB /* RadioButtonTableViewCell.swift in Sources */,
 				C752BDAA2731C0D00086582A /* Category.swift in Sources */,
 				C704225027160A2B00ACF67A /* AppDelegate.swift in Sources */,
 				C704226D27175A8000ACF67A /* TabBarController.swift in Sources */,
@@ -392,6 +408,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 63U36WDKYR;
 				INFOPLIST_FILE = CatsNew/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -410,6 +427,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 63U36WDKYR;
 				INFOPLIST_FILE = CatsNew/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

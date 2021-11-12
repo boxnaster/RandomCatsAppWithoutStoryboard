@@ -21,12 +21,12 @@ class SearchViewController: UIViewController {
     private let apiKey = "66597ab0-3a1d-444d-ad96-8e393fb9cf9e"
     private let endpoint = "https://api.thecatapi.com/v1/images/search"
     private let pageLimit = 10
-    private var totalItems: Int?
+    // private var totalItems: Int?
     private var page = 0
     private var isSearching = false
     private var cats: [Cat] = []
     private var searchSession: URLSession?
-    private var searchTask: URLSessionDataTask?
+ //   private var searchTask: URLSessionDataTask?
 
     init() {
         catModels = dataStorage.getCats()
@@ -58,16 +58,21 @@ class SearchViewController: UIViewController {
 
         searchSession = URLSession(configuration: .default)
         getCats()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCats), name: NSNotification.Name("RefreshCats"), object: nil)
+    }
+
+    @objc private func refreshCats() {
+        breedFilterButton.setTitle("Breed: \(DataStorage.selectedBreeds.map { $0.name }.joined(separator: ", "))", for: .normal)
+        categoryFilterButton.setTitle("Category: \(DataStorage.selectedCategory?.name ?? "")", for: .normal)
+        cats = []
+        page = 0
+        getCats()
     }
 
     private func getCats() {
-        searchTask?.cancel()
-        searchTask = nil
-
         let urlComponents = prepareAndGetUrlComponents()
-        guard let url = urlComponents.url else {
-            return
-        }
+        guard let url = urlComponents.url else { return }
         isSearching = true
         changeSpinnerState()
         let localTask = searchSession?.dataTask(
@@ -86,7 +91,14 @@ class SearchViewController: UIViewController {
                             let image = UIImage(data: data!)
                             cat.image = image!
                         }
-                        strongSelf.cats.append(contentsOf: parsedCats)
+                        var originalCats: [Cat] = []
+                        let existingCatIds = strongSelf.cats.map { $0.identifier }
+                        for cat in parsedCats {
+                            if !existingCatIds.contains(cat.identifier) {
+                                originalCats.append(cat)
+                            }
+                        }
+                        strongSelf.cats.append(contentsOf: originalCats)
                         strongSelf.collectionView.reloadData()
                     case .failure(let error):
                         strongSelf.presentError(error)
@@ -95,7 +107,7 @@ class SearchViewController: UIViewController {
                     strongSelf.changeSpinnerState()
                 })
             })
-        searchTask = localTask
+     //   searchTask = localTask
         localTask?.resume()
     }
 
@@ -107,6 +119,12 @@ class SearchViewController: UIViewController {
         queryItems.append(URLQueryItem(name: "limit", value: String(pageLimit)))
         queryItems.append(URLQueryItem(name: "page", value: String(page)))
         queryItems.append(URLQueryItem(name: "api-key", value: apiKey))
+
+        if DataStorage.selectedCategory != nil {
+            queryItems.append(URLQueryItem(name: "category_ids", value: String(DataStorage.selectedCategory!.identifier)))
+        }
+        let breeds = DataStorage.selectedBreeds.map { $0.identifier }
+        queryItems.append(URLQueryItem(name: "breed_ids", value: breeds.joined(separator: ",")))
         urlComponents.queryItems = queryItems
 
         return urlComponents
@@ -161,7 +179,8 @@ class SearchViewController: UIViewController {
     }
 
     private func initializeBreedFilterButton() {
-        breedFilterButton.setTitle("Breed: \(breeds.joined(separator: ", "))", for: .normal)
+        // breedFilterButton.setTitle("Breed: \(breeds.joined(separator: ", "))", for: .normal)
+        breedFilterButton.setTitle("Breed: \(DataStorage.selectedBreeds.map { $0.name }.joined(separator: ", "))", for: .normal)
         breedFilterButton.setTitleColor(.black, for: .normal)
         breedFilterButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         breedFilterButton.contentHorizontalAlignment = .left
@@ -174,7 +193,7 @@ class SearchViewController: UIViewController {
     }
 
     private func initializeCategoryFilterButton() {
-        categoryFilterButton.setTitle("Category: \(categories.joined(separator: ", "))", for: .normal)
+        categoryFilterButton.setTitle("Category: \(DataStorage.selectedCategory?.name ?? "")", for: .normal)
         categoryFilterButton.setTitleColor(.black, for: .normal)
         categoryFilterButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         categoryFilterButton.contentHorizontalAlignment = .left
@@ -236,6 +255,7 @@ extension SearchViewController: UICollectionViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // переделать на количество элементов page * pageLimit + 5
         if collectionView.contentOffset.y >= collectionView.contentSize.height - collectionView.bounds.size.height {
             if !isSearching {
                 page += 1
@@ -247,7 +267,7 @@ extension SearchViewController: UICollectionViewDelegate {
 
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10 * (page + 1)
+        cats.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -258,6 +278,8 @@ extension SearchViewController: UICollectionViewDataSource {
             imageView.layer.cornerRadius = 10
             imageView.clipsToBounds = true
             cell.backgroundView = imageView
+            // переделать backgroundView
+            // добавить кеш
         }
         return cell
     }

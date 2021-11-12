@@ -1,8 +1,8 @@
 //
-//  CategoryFilterView.swift
+//  CategoryFilter.swift
 //  RandomCatsAppWithoutStoryboard
 //
-//  Created by Анастасия Тимофеева on 23.10.2021.
+//  Created by Анастасия Тимофеева on 22.10.2021.
 //
 
 import Foundation
@@ -12,33 +12,109 @@ class CategoryFilter: UIViewController {
 
     private let container: UIView! = UIView()
     private let filterTitle: UILabel! = UILabel()
-    private let scrollView: UIScrollView! = UIScrollView()
-    private let radioButtonsStackView: UIStackView! = UIStackView()
+    private var tableView: UITableView! = UITableView()
     private let applyButton: UIButton! = UIButton()
-    private let dataStorage = DataStorage()
-    private var radioButtons: [UIButton] = []
+
+    private var searchSpinner: UIActivityIndicatorView! = UIActivityIndicatorView(style: .large)
+    private let apiKey = "66597ab0-3a1d-444d-ad96-8e393fb9cf9e"
+    private let endpoint = "https://api.thecatapi.com/v1/categories"
+    private var isSearching = false
+    private var areCategoriesLoaded = false
+    private var categories: [Category] = []
+    private var searchSession: URLSession?
+    private var searchTask: URLSessionDataTask?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let catModels = dataStorage.getCats()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOutside))
+        tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
 
         initializeTitle()
-        initializeRadioButtonsStackView()
         initializeApplyButton()
-        createRadioButtons(catModels)
+        initializeTableView()
 
         addSubviews()
 
         setupContainer()
         setupTitle()
         setupApplyButton()
-        setupScrollView()
-        setupRadioButtonsStackView()
+        setupTableView()
+
+        searchSession = URLSession(configuration: .default)
+        getCategories()
+    }
+
+    private func getCategories() {
+        let urlComponents = prepareAndGetUrlComponents()
+        guard let url = urlComponents.url else {
+            return
+        }
+        isSearching = true
+        changeSpinnerState()
+        let localTask = searchSession?.dataTask(
+            with: url,
+            completionHandler: { [weak self] (responseData: Data?, response: URLResponse?, error: Error?) in
+                DispatchQueue.main.async(execute: { [weak self] in
+                    guard let strongSelf = self else {
+                        return
+                    }
+                    let result = CategoriesParser.parseCategories(responseData: responseData, response: response, error: error)
+                    switch result {
+                    case .success(let parsedCategories):
+                        if parsedCategories.isEmpty {
+                            strongSelf.areCategoriesLoaded = true
+                        } else {
+                            strongSelf.categories.append(contentsOf: parsedCategories)
+                            strongSelf.tableView.reloadData()
+                        }
+                    case .failure(let error):
+                        strongSelf.presentError(error)
+                    }
+                    strongSelf.isSearching = false
+                    strongSelf.changeSpinnerState()
+                })
+            })
+        searchTask = localTask
+        localTask?.resume()
+    }
+
+    private func prepareAndGetUrlComponents() -> URLComponents {
+        guard var urlComponents = URLComponents(string: endpoint) else {
+            return URLComponents()
+        }
+        var queryItems: [URLQueryItem] = urlComponents.queryItems ?? []
+        queryItems.append(URLQueryItem(name: "api-key", value: apiKey))
+        urlComponents.queryItems = queryItems
+
+        return urlComponents
+    }
+
+    private func presentError(_ error: Error) {
+        let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""),
+                                      message: error.localizedDescription,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""),
+                                      style: .default,
+                                      handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+
+    private func changeSpinnerState() {
+        if isSearching {
+            searchSpinner.startAnimating()
+        } else {
+            searchSpinner.stopAnimating()
+        }
+    }
+
+    private func initializeSearchSpinner() {
+        searchSpinner.hidesWhenStopped = true
+        searchSpinner.stopAnimating()
+        searchSpinner.center = tableView.center
     }
 
     @objc private func tapOutside(_ sender: UITapGestureRecognizer) {
@@ -70,68 +146,21 @@ class CategoryFilter: UIViewController {
         filterTitle.textAlignment = .left
     }
 
-    private func setupScrollView() {
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
-        scrollView.widthAnchor.constraint(equalTo: container.widthAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: filterTitle.bottomAnchor, constant: 20).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: container.bottomAnchor).isActive = true
+    private func initializeTableView() {
+        tableView = UITableView()
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(RadioButtonTableViewCell.self, forCellReuseIdentifier: RadioButtonTableViewCell.cellIdentifier)
+        tableView.backgroundColor = UIColor.white
+        tableView.allowsMultipleSelection = false
     }
 
-    private func setupRadioButtonsStackView() {
-        radioButtonsStackView.translatesAutoresizingMaskIntoConstraints = false
-        radioButtonsStackView.leftAnchor.constraint(equalTo: scrollView.leftAnchor).isActive = true
-        radioButtonsStackView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        radioButtonsStackView.rightAnchor.constraint(equalTo: scrollView.rightAnchor).isActive = true
-        radioButtonsStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
-    }
-
-    private func initializeRadioButtonsStackView() {
-        radioButtonsStackView.axis = .vertical
-        radioButtonsStackView.distribution = .equalCentering
-        radioButtonsStackView.alignment = .leading
-    }
-
-    private func setupRadioButton(_ radioButton: UIButton) {
-        radioButton.translatesAutoresizingMaskIntoConstraints = false
-        radioButton.widthAnchor.constraint(equalTo: radioButtonsStackView.widthAnchor).isActive = true
-        radioButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-    }
-
-    private func initializeRadioButton(_ radioButton: UIButton, _ category: String) {
-        radioButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        radioButton.setTitle("   \(category)", for: .normal)
-        radioButton.setTitleColor(.black, for: .normal)
-        radioButton.contentHorizontalAlignment = .left
-        radioButton.setImage(UIImage(named: "circle.svg"), for: .normal)
-        radioButton.setImage(UIImage(named: "record-circle.svg"), for: .selected)
-        radioButton.addTarget(self, action: #selector(flipRadioButton(_:)), for: .touchUpInside)
-    }
-
-    @objc private func flipRadioButton(_ sender: UIButton) {
-        if sender.isSelected {
-            return
-        }
-
-        sender.isSelected.toggle()
-
-        for radioButton in radioButtons {
-            if radioButton != sender && radioButton.isSelected {
-                radioButton.isSelected = false
-            }
-        }
-    }
-
-    private func createRadioButtons(_ catModels: [CatModel]) {
-        let categories = Array(Set(catModels.map { $0.category }))
-        for category in categories {
-            let radioButton = UIButton()
-
-            initializeRadioButton(radioButton, category)
-            radioButtonsStackView.addArrangedSubview(radioButton)
-            setupRadioButton(radioButton)
-            radioButtons.append(radioButton)
-        }
+    private func setupTableView() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        tableView.widthAnchor.constraint(equalTo: container.widthAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: filterTitle.bottomAnchor, constant: 20).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: applyButton.topAnchor).isActive = true
     }
 
     private func initializeApplyButton() {
@@ -140,6 +169,13 @@ class CategoryFilter: UIViewController {
         applyButton.setTitleColor(.white, for: .normal)
         applyButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         applyButton.contentHorizontalAlignment = .center
+        applyButton.addTarget(self, action: #selector(flipApplyButton), for: .touchUpInside)
+    }
+
+    @objc func flipApplyButton() {
+        DataStorage.selectedCategory = categories[DataStorage.selectedCategoryRow!]
+        NotificationCenter.default.post(name: NSNotification.Name("RefreshCats"), object: nil)
+        dismiss(animated: true, completion: nil)
     }
 
     private func setupApplyButton() {
@@ -153,8 +189,58 @@ class CategoryFilter: UIViewController {
     private func addSubviews() {
         view.addSubview(container)
         container.addSubview(filterTitle)
-        container.addSubview(scrollView)
-        scrollView.addSubview(radioButtonsStackView)
+        container.addSubview(tableView)
         container.addSubview(applyButton)
+        tableView.addSubview(searchSpinner)
+    }
+}
+
+extension CategoryFilter: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: RadioButtonTableViewCell.cellIdentifier, for: indexPath)
+                as? RadioButtonTableViewCell else {
+                    fatalError("Can't dequeue reusable cell.")
+                }
+
+        if indexPath.row < categories.count {
+            cell.categoryName.text = categories[indexPath.row].name
+
+            if DataStorage.selectedCategoryRow == indexPath.row {
+                cell.radioButton.isSelected = true
+            } else {
+                cell.radioButton.isSelected = false
+            }
+        }
+
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        categories.count
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        50.0
+    }
+}
+
+extension CategoryFilter: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        guard let cell = tableView.cellForRow(at: indexPath) as? RadioButtonTableViewCell else {
+            fatalError("There is no cell at indexPath \(indexPath).")
+        }
+
+        cell.radioButton.isSelected = true
+        DataStorage.selectedCategoryRow = indexPath.row
+    }
+
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? RadioButtonTableViewCell else {
+            fatalError("There is no cell at indexPath \(indexPath).")
+        }
+
+        cell.radioButton.isSelected = false
+        DataStorage.selectedCategoryRow = -1
     }
 }

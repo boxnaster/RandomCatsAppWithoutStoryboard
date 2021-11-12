@@ -8,10 +8,10 @@
 import Foundation
 
 class Category {
-    public let identifier: String
+    public let identifier: Int
     public let name: String
 
-    init(identifier: String, name: String) {
+    init(identifier: Int, name: String) {
         self.identifier = identifier
         self.name = name
     }

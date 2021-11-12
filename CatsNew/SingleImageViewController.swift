@@ -14,7 +14,7 @@ class SingleImageViewController: UIViewController {
     private let dataStorage = DataStorage()
     private let catId: String
     private var scrollView: UIScrollView! = UIScrollView()
-    private var contentView: UIView! = UIView()
+ //   private var contentView: UIView! = UIView()
     private var imageView: UIImageView! = UIImageView()
     private var likeButton = LikeButton()
     private var breedsLabel: UILabel! = UILabel()
@@ -55,7 +55,7 @@ class SingleImageViewController: UIViewController {
         addSubviews()
 
         setupScrollView()
-        setupContentView()
+      //  setupContentView()
         setupLikeButton()
         setupBreedsLabel()
         setupCategoryLabel()
@@ -65,9 +65,6 @@ class SingleImageViewController: UIViewController {
     }
 
     private func getCat() {
-        searchTask?.cancel()
-        searchTask = nil
-
         let urlComponents = prepareAndGetUrlComponents()
         guard let url = urlComponents.url else {
             return
@@ -97,7 +94,7 @@ class SingleImageViewController: UIViewController {
                     strongSelf.changeSpinnerState()
                 })
             })
-        searchTask = localTask
+      //  searchTask = localTask
         localTask?.resume()
 
     }
@@ -170,56 +167,85 @@ class SingleImageViewController: UIViewController {
 
     private func addSubviews() {
         view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        contentView.addSubview(imageView)
-        contentView.addSubview(likeButton)
-        contentView.addSubview(breedsLabel)
-        contentView.addSubview(categoryLabel)
-        contentView.addSubview(searchSpinner)
+        scrollView.addSubview(imageView)
+        scrollView.addSubview(likeButton)
+        scrollView.addSubview(breedsLabel)
+        scrollView.addSubview(categoryLabel)
+        scrollView.addSubview(searchSpinner)
+//        scrollView.addSubview(contentView)
+//        contentView.addSubview(imageView)
+//        contentView.addSubview(likeButton)
+//        contentView.addSubview(breedsLabel)
+//        contentView.addSubview(categoryLabel)
+//        contentView.addSubview(searchSpinner)
     }
 
     private func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         scrollView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
-    private func setupContentView() {
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-        contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
-        contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
-    }
+//    private func setupContentView() {
+//        contentView.translatesAutoresizingMaskIntoConstraints = false
+//        contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+//        contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
+//        contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+//        contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+//    }
 
     private func setupImageView() {
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
-        imageView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
-        imageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        imageView.contentMode = .scaleAspectFit
+//        imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+//        imageView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
+//        imageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+//        imageView.contentMode = .scaleAspectFit
+       // let size = UIScreen.main.bounds
+       // imageView.frame = CGRect(x: 0.0, y: 0.0, width: size.width, height: size.height)
+
+
+      //  imageView.frame = CGRect(x: 0.0, y: 0.0, width: view.frame.width, height: 100.0)
+      //  imageView.contentMode = .top
+        imageView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+ //       imageView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        imageView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+
+        imageView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+       // imageView.topAnchor.constraint(equalTo: scrollView.topAnchor).priority = .defaultHigh
+       // imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+       // imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+       // imageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        imageView.contentMode = .top
+       // imageView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+       // imageView.bottomAnchor.constraint(equalTo: likeButton.topAnchor, constant: 20).isActive = true
     }
 
     private func setupLikeButton() {
         likeButton.translatesAutoresizingMaskIntoConstraints = false
-        likeButton.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
+ //       likeButton.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
+        likeButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 20).isActive = true
         likeButton.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20).isActive = true
     }
 
     private func setupBreedsLabel() {
         breedsLabel.translatesAutoresizingMaskIntoConstraints = false
-        breedsLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
+  //      breedsLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
+        breedsLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 20).isActive = true
         breedsLabel.topAnchor.constraint(equalTo: likeButton.bottomAnchor, constant: 20).isActive = true
-        breedsLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 20).isActive = true
+   //     breedsLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 20).isActive = true
+        breedsLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: 20).isActive = true
     }
 
     private func setupCategoryLabel() {
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
-        categoryLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
+   //     categoryLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
+        categoryLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 20).isActive = true
         categoryLabel.topAnchor.constraint(equalTo: breedsLabel.bottomAnchor, constant: 20).isActive = true
-        categoryLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 20).isActive = true
-        categoryLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+    //    categoryLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 20).isActive = true
+        categoryLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: 20).isActive = true
+    //    categoryLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        categoryLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
     }
 }
