@@ -32,10 +32,9 @@ class BreedFilter: UIViewController {
 
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
 
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOutside))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
+        initializeGestureRecognizer()
 
+        initializeSearchSpinner()
         initializeTitle()
         initializeApplyButton()
         initializeTableView()
@@ -110,6 +109,12 @@ class BreedFilter: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 
+    private func initializeGestureRecognizer() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOutside))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+
     private func changeSpinnerState() {
         if isSearching {
             searchSpinner.startAnimating()
@@ -121,7 +126,7 @@ class BreedFilter: UIViewController {
     private func initializeSearchSpinner() {
         searchSpinner.hidesWhenStopped = true
         searchSpinner.stopAnimating()
-        searchSpinner.center = tableView.center
+        searchSpinner.center = view.center
     }
 
     @objc private func tapOutside(_ sender: UITapGestureRecognizer) {
@@ -226,9 +231,8 @@ extension BreedFilter: UITableViewDataSource {
                     fatalError("Can't dequeue reusable cell.")
                 }
 
-        let breed = breeds[indexPath.row]
-
         if indexPath.row < breeds.count {
+            let breed = breeds[indexPath.row]
             cell.breedName.text = breed.name
             cell.checkBoxButton.isSelected = DataStorage.selectedBreeds.map { $0.identifier }.contains(breed.identifier)
         }

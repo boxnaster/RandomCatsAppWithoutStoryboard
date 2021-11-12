@@ -20,7 +20,7 @@ class CatCollectionViewCell: UICollectionViewCell {
         addSubview(imageView)
         setupImageView()
     }
-    
+
     private func setupImageView() {
         imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true

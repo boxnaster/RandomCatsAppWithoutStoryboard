@@ -13,6 +13,7 @@ class SearchViewController: UIViewController {
     private var collectionView: UICollectionView!
     private let breedFilterButton: UIButton! = UIButton()
     private let categoryFilterButton: UIButton! = UIButton()
+    private let notFoundLabel: UILabel! = UILabel()
     private var searchSpinner: UIActivityIndicatorView! = UIActivityIndicatorView(style: .large)
     private let apiKey = "66597ab0-3a1d-444d-ad96-8e393fb9cf9e"
     private let endpoint = "https://api.thecatapi.com/v1/images/search"
@@ -31,16 +32,18 @@ class SearchViewController: UIViewController {
         searchSession = URLSession(configuration: .default)
         getCats()
 
-        initializeSearchSpinner()
         initializeBreedFilterButton()
         initializeCategoryFilterButton()
         initializeCollectionView()
+        initializeNotFoundLabel()
+        initializeSearchSpinner()
 
         addSubviews()
 
         setupBreedFilterButton()
         setupCategoryFilterButton()
         setupCollectionView()
+        setupNotFoundLabel()
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCats), name: NSNotification.Name("RefreshCats"), object: nil)
     }
@@ -61,33 +64,35 @@ class SearchViewController: UIViewController {
         let localTask = searchSession?.dataTask(
             with: url,
             completionHandler: { [weak self] (responseData: Data?, response: URLResponse?, error: Error?) in
-                DispatchQueue.main.async(execute: { [weak self] in
+                DispatchQueue.init(label: "ApiCall").async(execute: { [weak self] in
                     guard let strongSelf = self else {
                         return
                     }
                     let result = CatsParser.parseCats(responseData: responseData, response: response, error: error)
                     switch result {
                     case .success(let parsedCats):
-                        for cat in parsedCats {
-                            let url = URL(string: cat.url)
-                            let data = try? Data(contentsOf: url!)
-                            let image = UIImage(data: data!, scale: CGFloat(cat.width) / strongSelf.view.frame.width)
-                            cat.image = image!
+
+                        DispatchQueue.main.async {
+                            strongSelf.notFoundLabel.isHidden = !parsedCats.isEmpty
                         }
-                        var originalCats: [Cat] = []
-                        let existingCatIds = strongSelf.cats.map { $0.identifier }
-                        for cat in parsedCats {
-                            if !existingCatIds.contains(cat.identifier) {
-                                originalCats.append(cat)
-                            }
-                        }
+
+                        strongSelf.setImages(parsedCats)
+                        let originalCats = strongSelf.getOriginalCats(parsedCats)
                         strongSelf.cats.append(contentsOf: originalCats)
-                        strongSelf.collectionView.reloadData()
+
+                        DispatchQueue.main.async {
+                            self?.collectionView.reloadData()
+                        }
+
                     case .failure(let error):
                         strongSelf.presentError(error)
                     }
                     strongSelf.isSearching = false
-                    strongSelf.changeSpinnerState()
+
+                    DispatchQueue.main.async {
+                        self?.changeSpinnerState()
+                    }
+
                 })
             })
         localTask?.resume()
@@ -122,6 +127,26 @@ class SearchViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 
+    private func setImages(_ parsedCats: ([Cat])) {
+        for cat in parsedCats {
+            let url = URL(string: cat.url)
+            let data = try? Data(contentsOf: url!)
+            let image = UIImage(data: data!, scale: CGFloat(cat.width) / view.frame.width)
+            cat.image = image!
+        }
+    }
+
+    private func getOriginalCats(_ parsedCats: ([Cat])) -> [Cat] {
+        var originalCats: [Cat] = []
+        let existingCatIds = cats.map { $0.identifier }
+        for cat in parsedCats {
+            if !existingCatIds.contains(cat.identifier) {
+                originalCats.append(cat)
+            }
+        }
+        return originalCats
+    }
+
     private func changeSpinnerState() {
         if isSearching {
             searchSpinner.startAnimating()
@@ -132,7 +157,6 @@ class SearchViewController: UIViewController {
 
     private func initializeSearchSpinner() {
         searchSpinner.hidesWhenStopped = true
-        searchSpinner.stopAnimating()
         searchSpinner.center = view.center
     }
 
@@ -162,12 +186,12 @@ class SearchViewController: UIViewController {
 
     private func initializeBreedFilterButton() {
         setBreedFilterButtonTitle()
-        breedFilterButton.setTitleColor(.black, for: .normal)
+        breedFilterButton.setTitleColor(.white, for: .normal)
         breedFilterButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         breedFilterButton.contentHorizontalAlignment = .left
         breedFilterButton.titleLabel?.numberOfLines = 1
         breedFilterButton.titleLabel?.lineBreakMode = .byTruncatingTail
-        breedFilterButton.backgroundColor = UIColor(red: 255 / 255, green: 235 / 255, blue: 220 / 255, alpha: 1)
+        breedFilterButton.backgroundColor = .systemBlue
         breedFilterButton.layer.borderWidth = 0.5
         breedFilterButton.layer.borderColor = UIColor.gray.cgColor
         breedFilterButton.addTarget(self, action: #selector(flipBreedFilterButton), for: .touchUpInside)
@@ -175,12 +199,12 @@ class SearchViewController: UIViewController {
 
     private func initializeCategoryFilterButton() {
         setCategoryFilterButtonTitle()
-        categoryFilterButton.setTitleColor(.black, for: .normal)
+        categoryFilterButton.setTitleColor(.white, for: .normal)
         categoryFilterButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         categoryFilterButton.contentHorizontalAlignment = .left
         categoryFilterButton.titleLabel?.numberOfLines = 1
         categoryFilterButton.titleLabel?.lineBreakMode = .byTruncatingTail
-        categoryFilterButton.backgroundColor = UIColor(red: 255 / 255, green: 235 / 255, blue: 220 / 255, alpha: 1)
+        categoryFilterButton.backgroundColor = .systemBlue
         categoryFilterButton.layer.borderWidth = 0.5
         categoryFilterButton.layer.borderColor = UIColor.gray.cgColor
         categoryFilterButton.addTarget(self, action: #selector(flipCategoryFilterButton), for: .touchUpInside)
@@ -211,6 +235,20 @@ class SearchViewController: UIViewController {
         collectionView.backgroundColor = UIColor.white
     }
 
+    private func initializeNotFoundLabel() {
+        notFoundLabel.isHidden = true
+        notFoundLabel.text = "Not Found"
+        notFoundLabel.textAlignment = .center
+        notFoundLabel.textColor = .gray
+        notFoundLabel.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 30)
+    }
+
+    private func setupNotFoundLabel() {
+        notFoundLabel.translatesAutoresizingMaskIntoConstraints = false
+        notFoundLabel.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor).isActive = true
+        notFoundLabel.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor).isActive = true
+    }
+
     @objc func flipBreedFilterButton() {
         let breedFilter = BreedFilter()
         breedFilter.modalPresentationStyle = .overFullScreen
@@ -227,7 +265,8 @@ class SearchViewController: UIViewController {
         view.addSubview(breedFilterButton)
         view.addSubview(categoryFilterButton)
         view.addSubview(collectionView)
-        view.addSubview(searchSpinner)
+        collectionView.addSubview(notFoundLabel)
+        collectionView.addSubview(searchSpinner)
     }
 }
 
@@ -271,8 +310,9 @@ extension SearchViewController: UICollectionViewDataSource {
                 as? CatCollectionViewCell else {
                     fatalError("Can't dequeue reusable cell.")
                 }
-        let cat = cats[indexPath.item]
+
         if indexPath.item < cats.count {
+            let cat = cats[indexPath.item]
             cell.imageView.image = cat.image
         }
         return cell

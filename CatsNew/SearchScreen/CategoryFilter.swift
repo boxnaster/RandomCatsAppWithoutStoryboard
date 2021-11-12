@@ -30,10 +30,9 @@ class CategoryFilter: UIViewController {
 
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
 
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOutside))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
+        initializeGestureRecognizer()
 
+        initializeSearchSpinner()
         initializeTitle()
         initializeApplyButton()
         initializeTableView()
@@ -106,6 +105,12 @@ class CategoryFilter: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 
+    private func initializeGestureRecognizer() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOutside))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+
     private func changeSpinnerState() {
         if isSearching {
             searchSpinner.startAnimating()
@@ -117,7 +122,7 @@ class CategoryFilter: UIViewController {
     private func initializeSearchSpinner() {
         searchSpinner.hidesWhenStopped = true
         searchSpinner.stopAnimating()
-        searchSpinner.center = tableView.center
+        searchSpinner.center = view.center
     }
 
     @objc private func tapOutside(_ sender: UITapGestureRecognizer) {
@@ -222,10 +227,9 @@ extension CategoryFilter: UITableViewDataSource {
                     fatalError("Can't dequeue reusable cell.")
                 }
 
-        let category = categories[indexPath.row]
-        let isSelected = DataStorage.selectedCategory?.identifier == category.identifier
-
         if indexPath.row < categories.count {
+            let category = categories[indexPath.row]
+            let isSelected = DataStorage.selectedCategory?.identifier == category.identifier
             cell.categoryName.text = category.name
             cell.radioButton.isSelected = isSelected
         }

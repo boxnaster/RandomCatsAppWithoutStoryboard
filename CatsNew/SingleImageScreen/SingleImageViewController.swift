@@ -41,6 +41,7 @@ class SingleImageViewController: UIViewController {
         self.title = catId
         self.view.backgroundColor = .white
 
+        initializeSearchSpinner()
         searchSession = URLSession(configuration: .default)
         getCat()
 
@@ -70,7 +71,7 @@ class SingleImageViewController: UIViewController {
                         let data = try? Data(contentsOf: url!)
                         let image = UIImage(data: data!, scale: CGFloat(strongSelf.cat.width) / strongSelf.view.frame.width)
                         strongSelf.imageView.image = image
-                        strongSelf.setupViewElements(strongSelf)
+                        strongSelf.setupViewElements()
                     case .failure(let error):
                         strongSelf.presentError(error)
                     }
@@ -106,16 +107,15 @@ class SingleImageViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 
-    private func setupViewElements(_ strongSelf: SingleImageViewController) {
-        strongSelf.initializeImageView()
-        strongSelf.setupImageView()
-        strongSelf.initializeImageView()
-        strongSelf.initializeBreedsLabel()
-        strongSelf.initializeCategoryLabel()
-        strongSelf.initializeSearchSpinner()
-        strongSelf.setupLikeButton()
-        strongSelf.setupBreedsLabel()
-        strongSelf.setupCategoryLabel()
+    private func setupViewElements() {
+        initializeImageView()
+        setupImageView()
+        initializeImageView()
+        initializeBreedsLabel()
+        initializeCategoryLabel()
+        setupLikeButton()
+        setupBreedsLabel()
+        setupCategoryLabel()
     }
 
     private func changeSpinnerState() {
